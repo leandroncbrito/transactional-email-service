@@ -10,3 +10,10 @@ services:
       dockerfile: Api/Dockerfile
     ports:
       - 5000:5000
+  cli:
+    image: cli
+    build:
+      context: .
+      dockerfile: Cli/Dockerfile
+    ports:
+      - 5001:5001

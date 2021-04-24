@@ -57,7 +57,11 @@
             "dependsOn": [
                 "docker-build: debug"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "ports": [
+                    { "hostPort": 5000, "containerPort": 5000 }
+                ]
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/Api/Api.csproj",
                 "enableDebugging": true
