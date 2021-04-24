@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: Cli/Dockerfile
     ports:
-      - 5001:5001
+      - 5010:5010
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
