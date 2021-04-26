@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
@@ -25,19 +26,34 @@
             }
         },
         {
-            "name": ".NET Core Attach",
+            "name": ".NET Core Launch (console)",
             "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/Cli/bin/Debug/net5.0/Cli.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Cli",
+            "stopAtEntry": false,
+            "console": "internalConsole"
         },
+        // Docker
         {
-            "name": "Docker .NET Core Launch",
+            "name": "Docker .NET Core Launch (web)",
             "type": "docker",
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
                 "appProject": "${workspaceFolder}/Api/Api.csproj"
             }
-        }
+        },
+        {
+            "name": "Docker .NET Core Launch (console)",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run-console: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/Cli/Cli.csproj"
+            }
+        },
     ]
 }

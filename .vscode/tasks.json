@@ -3,6 +3,7 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        //build
         {
             "label": "build",
             "command": "dotnet",
@@ -18,6 +19,7 @@
             },
             "problemMatcher": "$msCompile"
         },
+        // build debug
         {
             "type": "docker-build",
             "label": "docker-build: debug",
@@ -37,6 +39,24 @@
         },
         {
             "type": "docker-build",
+            "label": "docker-build-console: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "transactionalemailservice:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/Cli/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/Cli/Cli.csproj"
+            }
+        },
+        // build release
+        {
+            "type": "docker-build",
             "label": "docker-build: release",
             "dependsOn": [
                 "build"
@@ -51,6 +71,23 @@
                 "appProject": "${workspaceFolder}/Api/Api.csproj"
             }
         },
+        {
+            "type": "docker-build",
+            "label": "docker-build-console: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "transactionalemailservice:latest",
+                "dockerfile": "${workspaceFolder}/Cli/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/Cli/Cli.csproj"
+            }
+        },
+        // run debug
         {
             "type": "docker-run",
             "label": "docker-run: debug",
@@ -69,6 +106,23 @@
         },
         {
             "type": "docker-run",
+            "label": "docker-run-console: debug",
+            "dependsOn": [
+                "docker-build-console: debug"
+            ],
+            "dockerRun": {
+                "ports": [
+                    { "hostPort": 5011, "containerPort": 5010 }
+                ]
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/Cli/Cli.csproj",
+                "enableDebugging": true
+            }
+        },
+        // run release
+        {
+            "type": "docker-run",
             "label": "docker-run: release",
             "dependsOn": [
                 "docker-build: release"
@@ -77,6 +131,17 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/Api/Api.csproj"
             }
-        }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-console: release",
+            "dependsOn": [
+                "docker-build-console: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/Cli/Cli.csproj"
+            }
+        },
     ]
 }
