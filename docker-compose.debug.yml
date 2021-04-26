@@ -14,14 +14,3 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
-  cli:
-    image: cli
-    build:
-      context: .
-      dockerfile: Cli/Dockerfile
-    ports:
-      - 5010:5010
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ~/.vsdbg:/remote_debugger:rw
