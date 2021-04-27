@@ -95,6 +95,9 @@
                 "docker-build: debug"
             ],
             "dockerRun": {
+                "env": {
+                    "ASPNETCORE_URLS": "https://+:5001"
+                },
                 "ports": [
                     { "hostPort": 5001, "containerPort": 5000 }
                 ]
@@ -111,6 +114,9 @@
                 "docker-build-console: debug"
             ],
             "dockerRun": {
+                "env": {
+                    "ASPNETCORE_URLS": "https://+:5011"
+                },
                 "ports": [
                     { "hostPort": 5011, "containerPort": 5010 }
                 ]
