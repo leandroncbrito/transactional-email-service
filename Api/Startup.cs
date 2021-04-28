@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SendGrid.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Service;
 using Service.Core.Interfaces;
 using Service.Models;
+using Service.Providers;
 using System;
 
 namespace Api
@@ -44,6 +46,12 @@ namespace Api
                     }
                 });
 
+            services.AddSendGrid(options =>
+            {
+                options.ApiKey = Configuration.GetValue<string>("SENDGRID_API_KEY");
+            });
+
+            services.AddSingleton<ISendGridProvider, SendGridProvider>();
             services.AddSingleton<IEmailService, EmailService>();
         }
 
