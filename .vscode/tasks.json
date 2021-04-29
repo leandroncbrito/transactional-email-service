@@ -29,12 +29,12 @@
             "dockerBuild": {
                 "tag": "transactionalemailservice:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/Api/Dockerfile",
+                "dockerfile": "${workspaceFolder}/TransactionalEmail.Api/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/Api/Api.csproj"
+                "appProject": "${workspaceFolder}/TransactionalEmail.Api/TransactionalEmail.Api.csproj"
             }
         },
         {
@@ -46,12 +46,12 @@
             "dockerBuild": {
                 "tag": "transactionalemailservice:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/Cli/Dockerfile",
+                "dockerfile": "${workspaceFolder}/TransactionalEmail.Cli/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/Cli/Cli.csproj"
+                "appProject": "${workspaceFolder}/TransactionalEmail.Cli/TransactionalEmail.Cli.csproj"
             }
         },
         // build release
@@ -63,12 +63,12 @@
             ],
             "dockerBuild": {
                 "tag": "transactionalemailservice:latest",
-                "dockerfile": "${workspaceFolder}/Api/Dockerfile",
+                "dockerfile": "${workspaceFolder}/TransactionalEmail.Api/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/Api/Api.csproj"
+                "appProject": "${workspaceFolder}/TransactionalEmail.Api/TransactionalEmail.Api.csproj"
             }
         },
         {
@@ -79,12 +79,12 @@
             ],
             "dockerBuild": {
                 "tag": "transactionalemailservice:latest",
-                "dockerfile": "${workspaceFolder}/Cli/Dockerfile",
+                "dockerfile": "${workspaceFolder}/TransactionalEmail.Cli/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/Cli/Cli.csproj"
+                "appProject": "${workspaceFolder}/TransactionalEmail.Cli/TransactionalEmail.Cli.csproj"
             }
         },
         // run debug
@@ -96,14 +96,14 @@
             ],
             "dockerRun": {
                 "env": {
-                    "ASPNETCORE_URLS": "https://+:5001"
+                    "ASPNETCORE_URLS": "http://+:5001"
                 },
                 "ports": [
-                    { "hostPort": 5001, "containerPort": 5000 }
+                    { "hostPort": 5001, "containerPort": 5001 }
                 ]
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/Api/Api.csproj",
+                "appProject": "${workspaceFolder}/TransactionalEmail.Api/TransactionalEmail.Api.csproj",
                 "enableDebugging": true
             }
         },
@@ -115,14 +115,14 @@
             ],
             "dockerRun": {
                 "env": {
-                    "ASPNETCORE_URLS": "https://+:5011"
+                    "ASPNETCORE_URLS": "http://+:5011"
                 },
                 "ports": [
                     { "hostPort": 5011, "containerPort": 5010 }
                 ]
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/Cli/Cli.csproj",
+                "appProject": "${workspaceFolder}/TransactionalEmail.Cli/TransactionalEmail.Cli.csproj",
                 "enableDebugging": true
             }
         },
@@ -135,7 +135,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/Api/Api.csproj"
+                "appProject": "${workspaceFolder}/TransactionalEmail.Api/TransactionalEmail.Api.csproj"
             }
         },
         {
@@ -146,7 +146,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/Cli/Cli.csproj"
+                "appProject": "${workspaceFolder}/TransactionalEmail.Cli/TransactionalEmail.Cli.csproj"
             }
         },
     ]
