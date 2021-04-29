@@ -10,14 +10,14 @@ using Service.Models;
 
 namespace Service.Providers
 {
-    public class SendGridProvider : ISendGridProvider
+    public class SendGridProvider : IMailProvider
     {
+        private readonly ISendGridClient client;
         private readonly IOptions<SenderSettings> senderSettings;
-        private readonly ISendGridClient sendGridClient;
 
-        public SendGridProvider(ISendGridClient sendGridClient, IOptions<SenderSettings> senderSettings)
+        public SendGridProvider(ISendGridClient client, IOptions<SenderSettings> senderSettings)
         {
-            this.sendGridClient = sendGridClient;
+            this.client = client;
             this.senderSettings = senderSettings;
         }
 
@@ -27,20 +27,17 @@ namespace Service.Providers
 
             var from = new EmailAddress(senderSettings.Value.Mail, senderSettings.Value.Name);
 
-            var tos = new List<EmailAddress>
-            {
-                new EmailAddress(email, "Temporary user name"),
-            };
+            var to = new EmailAddress(email, "Temporary user name");
 
-            var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, message, htmlContent);
+            var msg = MailHelper.CreateSingleEmail(from, to, subject + " Sendgrid", message, htmlContent);
 
-            var response = await sendGridClient.SendEmailAsync(msg);
+            var response = await client.SendEmailAsync(msg);
 
             if (!response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Body.ReadAsStringAsync();
 
-                throw new Exception("Fail to send email");
+                throw new Exception("Fail to send email: " + responseBody);
             }
         }
     }
