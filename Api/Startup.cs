@@ -2,14 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SendGrid.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Service;
 using Service.Core.Interfaces;
-using Service.Models;
-using Service.Providers;
-using System;
+using Api.Configurations;
 
 namespace Api
 {
@@ -32,26 +29,10 @@ namespace Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
             });
 
-            services.Configure<SenderSettings>(Configuration.GetSection("SenderSettings"))
-                .PostConfigure<SenderSettings>(options =>
-                {
-                    if (string.IsNullOrEmpty(options.Mail))
-                    {
-                        throw new Exception("From email is empty");
-                    }
+            services.ConfigureMailSender(Configuration.GetSection("SenderSettings"));
 
-                    if (string.IsNullOrEmpty(options.Name))
-                    {
-                        throw new Exception("From name is empty");
-                    }
-                });
+            services.ConfigureMailProviders(Configuration.GetSection("MailProviderSettings"));
 
-            services.AddSendGrid(options =>
-            {
-                options.ApiKey = Configuration.GetValue<string>("SENDGRID_API_KEY");
-            });
-
-            services.AddSingleton<ISendGridProvider, SendGridProvider>();
             services.AddSingleton<IEmailService, EmailService>();
         }
 
