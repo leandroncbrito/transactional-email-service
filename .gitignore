@@ -448,3 +448,4 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 appsettings.Development.json
+docker-compose.override.yml
