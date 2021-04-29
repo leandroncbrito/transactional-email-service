@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid.Extensions.DependencyInjection;
-using Service.Core.Interfaces;
-using Service.Providers;
+using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Infra.Providers;
 
-namespace Api.Configurations
+namespace TransactionalEmail.Infra.Ioc
 {
     public static class MailProviderConfiguration
     {

@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{7C139FF3-4AF9-4B57-82DB-41FBBF0B9244}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionalEmail.Api", "TransactionalEmail.Api\TransactionalEmail.Api.csproj", "{7C139FF3-4AF9-4B57-82DB-41FBBF0B9244}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cli", "Cli\Cli.csproj", "{869CA525-3080-40A0-9479-0986BD3C2852}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionalEmail.Cli", "TransactionalEmail.Cli\TransactionalEmail.Cli.csproj", "{869CA525-3080-40A0-9479-0986BD3C2852}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{67DDF48E-C943-4AA1-B9C1-59F26F971B0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionalEmail.Core", "TransactionalEmail.Core\TransactionalEmail.Core.csproj", "{67DDF48E-C943-4AA1-B9C1-59F26F971B0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionalEmail.Infra", "TransactionalEmail.Infra\TransactionalEmail.Infra.csproj", "{251B3345-54D9-46AF-B5ED-A841A958724E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,5 +60,17 @@ Global
 		{67DDF48E-C943-4AA1-B9C1-59F26F971B0F}.Release|x64.Build.0 = Release|Any CPU
 		{67DDF48E-C943-4AA1-B9C1-59F26F971B0F}.Release|x86.ActiveCfg = Release|Any CPU
 		{67DDF48E-C943-4AA1-B9C1-59F26F971B0F}.Release|x86.Build.0 = Release|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Debug|x64.Build.0 = Debug|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Debug|x86.Build.0 = Debug|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Release|x64.ActiveCfg = Release|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Release|x64.Build.0 = Release|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Release|x86.ActiveCfg = Release|Any CPU
+		{251B3345-54D9-46AF-B5ED-A841A958724E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

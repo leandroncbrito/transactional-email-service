@@ -9,7 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Service\Service.csproj" />
+    <ProjectReference Include="..\TransactionalEmail.Infra\TransactionalEmail.Infra.csproj" />
+    <ProjectReference Include="..\TransactionalEmail.Core\TransactionalEmail.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using Service.Core.Interfaces;
-using Service.Models;
+using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.DTO;
 
-namespace Service.Providers
+namespace TransactionalEmail.Infra.Providers
 {
     public class SendGridProvider : IMailProvider
     {

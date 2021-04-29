@@ -1,8 +1,8 @@
-using Service.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TransactionalEmail.Core.Interfaces;
 
-namespace Service
+namespace TransactionalEmail.Core.Services
 {
     public class EmailService : IEmailService
     {

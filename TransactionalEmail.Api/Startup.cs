@@ -4,9 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Service;
-using Service.Core.Interfaces;
-using Api.Configurations;
+using TransactionalEmail.Infra.Ioc;
+using TransactionalEmail.Core.Services;
+using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.DTO;
 
 namespace Api
 {

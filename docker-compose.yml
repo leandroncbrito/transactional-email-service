@@ -5,6 +5,6 @@ services:
     image: api
     build:
       context: .
-      dockerfile: Api/Dockerfile
+      dockerfile: TransactionalEmail.Api/Dockerfile
     ports:
       - "80:80"

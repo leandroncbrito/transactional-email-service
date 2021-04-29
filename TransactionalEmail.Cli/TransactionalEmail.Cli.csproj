@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Service\Service.csproj" />
+    <ProjectReference Include="..\TransactionalEmail.Core\TransactionalEmail.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-namespace Service.Models
+namespace TransactionalEmail.Core.DTO
 {
     public class SenderSettings
     {

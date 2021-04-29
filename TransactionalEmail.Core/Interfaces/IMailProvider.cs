@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Service.Core.Interfaces
+namespace TransactionalEmail.Core.Interfaces
 {
     public interface IMailProvider
     {

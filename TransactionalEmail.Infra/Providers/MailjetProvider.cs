@@ -3,11 +3,11 @@ using Mailjet.Client.Resources;
 using System;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-using Service.Core.Interfaces;
 using Microsoft.Extensions.Options;
-using Service.Models;
+using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.Interfaces;
 
-namespace Service.Providers
+namespace TransactionalEmail.Infra.Providers
 {
     public class MailjetProvider : IMailProvider
     {

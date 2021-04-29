@@ -1,4 +1,4 @@
-namespace Api.Requests
+namespace TransactionalEmail.Api.Requests
 {
     public class MailRequest
     {

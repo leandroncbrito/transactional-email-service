@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Service.Core.Interfaces;
-using Api.Requests;
+using TransactionalEmail.Api.Requests;
+using TransactionalEmail.Core.Interfaces;
 
-namespace Api.Controllers
+namespace TransactionalEmail.Api.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
