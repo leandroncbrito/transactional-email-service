@@ -1,20 +1,24 @@
 using Service.Core.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Service
 {
     public class EmailService : IEmailService
     {
-        private readonly ISendGridProvider sendGridProvider;
+        private readonly IEnumerable<IMailProvider> providers;
 
-        public EmailService(ISendGridProvider sendGridProvider)
+        public EmailService(IEnumerable<IMailProvider> providers)
         {
-            this.sendGridProvider = sendGridProvider;
+            this.providers = providers;
         }
 
         public async Task SendEmail(string to, string subject, string message)
         {
-            await sendGridProvider.SendEmailAsync(to, subject, message);
+            foreach (var provider in providers)
+            {
+                await provider.SendEmailAsync(to, subject, message);
+            }
         }
     }
 }
