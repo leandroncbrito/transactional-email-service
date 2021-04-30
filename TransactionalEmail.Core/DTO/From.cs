@@ -1,8 +1,8 @@
 namespace TransactionalEmail.Core.DTO
 {
-    public class SenderSettings
+    public class From
     {
-        public string Mail { get; set; }
+        public string Email { get; set; }
 
         public string Name { get; set; }
     }

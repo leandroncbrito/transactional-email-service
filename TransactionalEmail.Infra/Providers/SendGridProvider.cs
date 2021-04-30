@@ -11,19 +11,19 @@ namespace TransactionalEmail.Infra.Providers
     public class SendGridProvider : IMailProvider
     {
         private readonly ISendGridClient client;
-        private readonly IOptions<SenderSettings> senderSettings;
+        private readonly IOptions<From> fromEmail;
 
-        public SendGridProvider(ISendGridClient client, IOptions<SenderSettings> senderSettings)
+        public SendGridProvider(ISendGridClient client, IOptions<From> fromEmail)
         {
             this.client = client;
-            this.senderSettings = senderSettings;
+            this.fromEmail = fromEmail;
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
             var htmlContent = "<strong>" + message + "</strong>";
 
-            var from = new EmailAddress(senderSettings.Value.Mail, senderSettings.Value.Name);
+            var from = new EmailAddress(fromEmail.Value.Email, fromEmail.Value.Name);
 
             var to = new EmailAddress(email, "Temporary user name");
 

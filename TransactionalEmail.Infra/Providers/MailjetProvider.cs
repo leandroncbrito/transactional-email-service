@@ -12,12 +12,12 @@ namespace TransactionalEmail.Infra.Providers
     public class MailjetProvider : IMailProvider
     {
         private readonly IMailjetClient client;
-        private readonly IOptions<SenderSettings> senderSettings;
+        private readonly IOptions<From> fromEmail;
 
-        public MailjetProvider(IMailjetClient client, IOptions<SenderSettings> senderSettings)
+        public MailjetProvider(IMailjetClient client, IOptions<From> fromEmail)
         {
             this.client = client;
-            this.senderSettings = senderSettings;
+            this.fromEmail = fromEmail;
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)
@@ -26,8 +26,8 @@ namespace TransactionalEmail.Infra.Providers
             {
                 Resource = Send.Resource,
             }
-            .Property(Send.FromEmail, senderSettings.Value.Mail)
-            .Property(Send.FromName, senderSettings.Value.Name)
+            .Property(Send.FromEmail, fromEmail.Value.Email)
+            .Property(Send.FromName, fromEmail.Value.Name)
             .Property(Send.Subject, subject + " Mailjet")
             .Property(Send.TextPart, message)
             .Property(Send.HtmlPart, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
