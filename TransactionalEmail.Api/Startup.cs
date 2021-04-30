@@ -30,13 +30,7 @@ namespace Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
             });
 
-            services.ConfigureMailSender(options =>
-            {
-                options.Mail = Configuration.GetValue<string>("SenderSettings:Mail");
-                options.Name = Configuration.GetValue<string>("SenderSettings:Name");
-            });
-
-            services.ConfigureMailProviders(Configuration.GetSection("MailProviderSettings"));
+            services.AddMailProviders(Configuration.GetSection("MailSettings"));
 
             services.AddSingleton<IEmailService, EmailService>();
         }

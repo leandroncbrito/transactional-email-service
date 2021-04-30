@@ -7,9 +7,9 @@ using TransactionalEmail.Infra.Providers;
 
 namespace TransactionalEmail.Infra.Ioc
 {
-    public static class MailProviderConfiguration
+    public static class ProviderConfiguration
     {
-        public static void ConfigureMailProviders(this IServiceCollection services, IConfigurationSection providerSettings)
+        public static void Configure(IServiceCollection services, IConfigurationSection providerSettings)
         {
             services.AddSingleton<IMailProvider, SendGridProvider>();
             services.AddSingleton<IMailProvider, MailjetProvider>();
