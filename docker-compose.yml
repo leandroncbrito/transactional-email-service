@@ -8,3 +8,8 @@ services:
       dockerfile: TransactionalEmail.Api/Dockerfile
     ports:
       - "80:80"
+  cli:
+    image: cli
+    build:
+      context: .
+      dockerfile: TransactionalEmail.Cli/Dockerfile
