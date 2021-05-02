@@ -96,7 +96,8 @@
             ],
             "dockerRun": {
                 "env": {
-                    "ASPNETCORE_URLS": "http://+:5001"
+                    "ASPNETCORE_URLS": "http://+:5001",
+                    "ASPNETCORE_ENVIRONMENT": "Development",
                 },
                 "ports": [
                     { "hostPort": 5001, "containerPort": 5001 }
@@ -115,7 +116,8 @@
             ],
             "dockerRun": {
                 "env": {
-                    "ASPNETCORE_URLS": "http://+:5011"
+                    "ASPNETCORE_URLS": "http://+:5011",
+                    "ASPNETCORE_ENVIRONMENT": "Development",
                 },
                 "ports": [
                     { "hostPort": 5011, "containerPort": 5010 }
