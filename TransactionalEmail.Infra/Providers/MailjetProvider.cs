@@ -23,7 +23,7 @@ namespace TransactionalEmail.Infra.Providers
             this.logger = logger;
         }
 
-        public async Task<bool> SendEmailAsync(string email, string subject, string message)
+        public async Task<bool> SendEmailAsync(EmailDTO emailDTO)
         {
             logger.LogInformation("Sending email using Mailjet provider");
 
@@ -33,13 +33,13 @@ namespace TransactionalEmail.Infra.Providers
             }
             .Property(Send.FromEmail, fromEmail.Value.Email)
             .Property(Send.FromName, fromEmail.Value.Name)
-            .Property(Send.Subject, subject)
-            .Property(Send.TextPart, message)
+            .Property(Send.Subject, emailDTO.Subject)
+            .Property(Send.TextPart, emailDTO.Message)
             //.Property(Send.HtmlPart, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
             .Property(Send.Recipients, new JArray {
                 new JObject {
                     {
-                        "Email", email
+                        "Email", emailDTO.To
                     }
                 }
             });

@@ -22,17 +22,17 @@ namespace TransactionalEmail.Infra.Providers
             this.logger = logger;
         }
 
-        public async Task<bool> SendEmailAsync(string email, string subject, string message)
+        public async Task<bool> SendEmailAsync(EmailDTO emailDTO)
         {
             logger.LogInformation("Sending email using Sendgrid provider");
 
-            var htmlContent = "<strong>" + message + "</strong>";
+            var htmlContent = "<strong>" + emailDTO.Message + "</strong>";
 
             var from = new EmailAddress(fromEmail.Value.Email, fromEmail.Value.Name);
 
-            var to = new EmailAddress(email, "Temporary user name");
+            var to = new EmailAddress(emailDTO.To, "Temporary user name");
 
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, message, htmlContent);
+            var msg = MailHelper.CreateSingleEmail(from, to, emailDTO.Subject, emailDTO.Message, htmlContent);
 
             var response = await client.SendEmailAsync(msg);
 

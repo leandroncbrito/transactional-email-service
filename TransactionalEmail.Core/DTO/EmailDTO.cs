@@ -2,10 +2,17 @@ namespace TransactionalEmail.Core.DTO
 {
     public class EmailDTO
     {
-        public string To { get; set; }
+        public EmailDTO(string to, string subject, string message)
+        {
+            To = to;
+            Subject = subject;
+            Message = message;
+        }
 
-        public string Subject { get; set; }
+        public string To { get; private set; }
 
-        public string Message { get; set; }
+        public string Subject { get; private set; }
+
+        public string Message { get; private set; }
     }
 }
