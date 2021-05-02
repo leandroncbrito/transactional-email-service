@@ -1,6 +1,6 @@
 namespace TransactionalEmail.Api.Requests
 {
-    public class MailRequest
+    public class EmailRequest
     {
         // @TODO: change to List
         public string To { get; set; }
