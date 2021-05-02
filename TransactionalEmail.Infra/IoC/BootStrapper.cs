@@ -1,38 +1,32 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
 using TransactionalEmail.Core.Services;
+using TransactionalEmail.Infra.Ioc.Config;
+using TransactionalEmail.Infra.Data;
+using MongoDB.Driver;
 
 namespace TransactionalEmail.Infra.Ioc
 {
     public static class BootStrapper
     {
-        public static void InitializeEmailServices(this IServiceCollection services, IConfigurationSection configuration)
+        public static void InitializeServices(this IServiceCollection services, IConfiguration configuration)
         {
-            AddEmailService(services);
+            var from = configuration.GetSection("MailSettings:From").Get<From>();
 
-            AddEmailConfiguration(services, configuration.GetSection("From"));
-
-            AddEmailProviders(services, configuration.GetSection("Providers"));
-        }
-
-        private static void AddEmailService(IServiceCollection services)
-        {
-            services.AddSingleton<IEmailService, EmailService>();
-        }
-
-        private static void AddEmailConfiguration(IServiceCollection services, IConfigurationSection configuration)
-        {
             SenderConfiguration.Configure(services, options =>
             {
-                options.Email = configuration.GetValue<string>("Email");
-                options.Name = configuration.GetValue<string>("Name");
+                options.Email = from.Email;
+                options.Name = from.Name;
             });
-        }
 
-        private static void AddEmailProviders(IServiceCollection services, IConfigurationSection configuration)
-        {
-            ProviderConfiguration.Configure(services, configuration);
+            ProviderConfiguration.Configure(services, configuration.GetSection("MailSettings:Providers"));
+
+            services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<IEmailRepository, EmailRepository>();
+
+            services.AddSingleton<IMongoClient, MongoClient>(sp => new MongoClient(configuration.GetConnectionString("MongoDb")));
         }
     }
 }

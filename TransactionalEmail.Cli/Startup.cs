@@ -15,7 +15,7 @@ namespace Cli
 
             var config = LoadConfiguration();
 
-            services.InitializeEmailServices(config.GetSection("MailSettings"));
+            services.InitializeServices(config);
 
             return services.BuildServiceProvider();
         }

@@ -5,11 +5,11 @@ using SendGrid.Extensions.DependencyInjection;
 using TransactionalEmail.Core.Interfaces;
 using TransactionalEmail.Infra.Providers;
 
-namespace TransactionalEmail.Infra.Ioc
+namespace TransactionalEmail.Infra.Ioc.Config
 {
     public static class ProviderConfiguration
     {
-        public static void Configure(IServiceCollection services, IConfigurationSection providerSettings)
+        internal static void Configure(IServiceCollection services, IConfigurationSection providerSettings)
         {
             services.AddSingleton<IMailProvider, SendGridProvider>();
             services.AddSingleton<IMailProvider, MailjetProvider>();
