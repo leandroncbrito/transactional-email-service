@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TransactionalEmail.Api.Requests;
+using TransactionalEmail.Api.Responses;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
 
@@ -8,7 +10,7 @@ namespace TransactionalEmail.Api.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class EmailController : ControllerBase
+    public class EmailController : ApiControllerBase
     {
         private readonly IEmailService emailService;
 
@@ -20,18 +22,16 @@ namespace TransactionalEmail.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Send(EmailRequest request)
         {
-            // validate request
-
             var emailDTO = new EmailDTO(request.To, request.Subject, request.Message);
 
             var success = await emailService.SendEmailAsync(emailDTO);
 
             if (!success)
             {
-                return BadRequest("Error sending email");
+                return BadRequestResponse("Error sending email");
             }
 
-            return Ok("Email sent succesfully");
+            return OkRequestResponse("Email successfully sent");
         }
     }
 }
