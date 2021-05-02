@@ -1,31 +1,54 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Models;
+using Microsoft.Extensions.Logging;
+using System;
+using TransactionalEmail.Core.DTO;
 
 namespace TransactionalEmail.Core.Services
 {
     public class EmailService : IEmailService
     {
         private readonly IEnumerable<IMailProvider> providers;
+        private readonly IEmailLoggerService emailLoggerService;
+        private readonly ILogger<EmailService> logger;
 
-        public EmailService(IEnumerable<IMailProvider> providers)
+        public EmailService(IEnumerable<IMailProvider> providers, IEmailLoggerService emailLoggerService, ILogger<EmailService> logger)
         {
             this.providers = providers;
+            this.emailLoggerService = emailLoggerService;
+            this.logger = logger;
         }
 
-        public async Task<bool> SendEmailAsync(string to, string subject, string message)
+        public async Task<bool> SendEmailAsync(EmailDTO emailDTO)
         {
-            foreach (var provider in providers)
+            try
             {
-                var response = await provider.SendEmailAsync(to, subject, message);
-
-                if (response)
+                foreach (var provider in providers)
                 {
-                    return true;
-                }
-            }
+                    logger.LogInformation("Sending email async");
 
-            return false;
+                    var success = await provider.SendEmailAsync(emailDTO);
+
+                    if (success)
+                    {
+                        logger.LogInformation("Email successfully sent");
+
+                        await emailLoggerService.Store(emailDTO);
+
+                        return true;
+                    }
+                }
+
+                logger.LogInformation("Unable to send email, check the providers settings");
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

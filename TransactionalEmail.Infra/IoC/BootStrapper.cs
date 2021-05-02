@@ -24,6 +24,7 @@ namespace TransactionalEmail.Infra.Ioc
             ProviderConfiguration.Configure(services, configuration.GetSection("MailSettings:Providers"));
 
             services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<IEmailLoggerService, EmailLoggerService>();
             services.AddSingleton<IEmailRepository, EmailRepository>();
 
             services.AddSingleton<IMongoClient, MongoClient>(sp => new MongoClient(configuration.GetConnectionString("MongoDb")));
