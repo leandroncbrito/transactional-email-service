@@ -17,7 +17,12 @@ namespace TransactionalEmail.Core.Services
         {
             foreach (var provider in providers)
             {
-                await provider.SendEmailAsync(to, subject, message);
+                var response = await provider.SendEmailAsync(to, subject, message);
+
+                if (response)
+                {
+                    return;
+                }
             }
         }
     }

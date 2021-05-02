@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace TransactionalEmail.Infra.Providers
 {
@@ -13,14 +14,16 @@ namespace TransactionalEmail.Infra.Providers
     {
         private readonly IMailjetClient client;
         private readonly IOptions<From> fromEmail;
+        private readonly ILogger<MailjetProvider> logger;
 
-        public MailjetProvider(IMailjetClient client, IOptions<From> fromEmail)
+        public MailjetProvider(IMailjetClient client, IOptions<From> fromEmail, ILogger<MailjetProvider> logger)
         {
             this.client = client;
             this.fromEmail = fromEmail;
+            this.logger = logger;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task<bool> SendEmailAsync(string email, string subject, string message)
         {
             MailjetRequest request = new MailjetRequest
             {
@@ -28,7 +31,7 @@ namespace TransactionalEmail.Infra.Providers
             }
             .Property(Send.FromEmail, fromEmail.Value.Email)
             .Property(Send.FromName, fromEmail.Value.Name)
-            .Property(Send.Subject, subject + " Mailjet")
+            .Property(Send.Subject, subject)
             .Property(Send.TextPart, message)
             .Property(Send.HtmlPart, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
             .Property(Send.Recipients, new JArray {
@@ -39,11 +42,14 @@ namespace TransactionalEmail.Infra.Providers
                 }
             });
 
-            MailjetResponse response = await client.PostAsync(request);
+            var response = await client.PostAsync(request);
+
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Fail to send email: " + response.GetErrorInfo());
+                logger.LogError(response.StatusCode, response.GetErrorInfo());
             }
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

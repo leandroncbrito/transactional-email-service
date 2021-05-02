@@ -5,6 +5,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using TransactionalEmail.Core.Interfaces;
 using TransactionalEmail.Core.DTO;
+using Microsoft.Extensions.Logging;
 
 namespace TransactionalEmail.Infra.Providers
 {
@@ -12,14 +13,16 @@ namespace TransactionalEmail.Infra.Providers
     {
         private readonly ISendGridClient client;
         private readonly IOptions<From> fromEmail;
+        private readonly ILogger<SendGridProvider> logger;
 
-        public SendGridProvider(ISendGridClient client, IOptions<From> fromEmail)
+        public SendGridProvider(ISendGridClient client, IOptions<From> fromEmail, ILogger<SendGridProvider> logger)
         {
             this.client = client;
             this.fromEmail = fromEmail;
+            this.logger = logger;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task<bool> SendEmailAsync(string email, string subject, string message)
         {
             var htmlContent = "<strong>" + message + "</strong>";
 
@@ -27,16 +30,17 @@ namespace TransactionalEmail.Infra.Providers
 
             var to = new EmailAddress(email, "Temporary user name");
 
-            var msg = MailHelper.CreateSingleEmail(from, to, subject + " Sendgrid", message, htmlContent);
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, message, htmlContent);
 
             var response = await client.SendEmailAsync(msg);
 
             if (!response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Body.ReadAsStringAsync();
-
-                throw new Exception("Fail to send email: " + responseBody);
+                logger.LogError(response.StatusCode.ToString(), responseBody);
             }
+
+            return response.IsSuccessStatusCode;
         }
     }
 }
