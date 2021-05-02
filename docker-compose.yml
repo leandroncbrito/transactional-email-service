@@ -13,3 +13,5 @@ services:
     build:
       context: .
       dockerfile: TransactionalEmail.Cli/Dockerfile
+    profiles:
+      - cli
