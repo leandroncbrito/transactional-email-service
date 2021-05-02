@@ -47,9 +47,14 @@ namespace Cli
 
             Console.WriteLine("\nSending email...");
 
-            await emailService.SendEmail(to, subject, message);
+            var response = await emailService.SendEmailAsync(to, subject, message);
 
-            Console.WriteLine("Email sent successfully");
+            if (response)
+            {
+                Console.WriteLine("Email sent successfully");
+            }
+
+            Console.WriteLine("Error sending email");
         }
     }
 }

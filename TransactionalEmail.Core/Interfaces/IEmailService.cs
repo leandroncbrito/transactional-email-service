@@ -5,6 +5,6 @@ namespace TransactionalEmail.Core.Interfaces
 {
     public interface IEmailService
     {
-        Task SendEmail(string to, string subject, string message);
+        Task<bool> SendEmailAsync(string to, string subject, string message);
     }
 }

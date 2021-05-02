@@ -19,7 +19,7 @@ namespace TransactionalEmail.Api.Controllers
         [HttpPost]
         public async Task Send(MailRequest request)
         {
-            await emailService.SendEmail(request.To, request.Subject, request.Message);
+            var response = await emailService.SendEmailAsync(request.To, request.Subject, request.Message);
         }
     }
 }

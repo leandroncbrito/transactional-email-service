@@ -13,7 +13,7 @@ namespace TransactionalEmail.Core.Services
             this.providers = providers;
         }
 
-        public async Task SendEmail(string to, string subject, string message)
+        public async Task<bool> SendEmailAsync(string to, string subject, string message)
         {
             foreach (var provider in providers)
             {
@@ -21,9 +21,11 @@ namespace TransactionalEmail.Core.Services
 
                 if (response)
                 {
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }
