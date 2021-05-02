@@ -13,10 +13,10 @@ namespace TransactionalEmail.Infra.Providers
     public class MailjetProvider : IMailProvider
     {
         private readonly IMailjetClient client;
-        private readonly IOptions<From> fromEmail;
+        private readonly IOptions<FromDTO> fromEmail;
         private readonly ILogger<MailjetProvider> logger;
 
-        public MailjetProvider(IMailjetClient client, IOptions<From> fromEmail, ILogger<MailjetProvider> logger)
+        public MailjetProvider(IMailjetClient client, IOptions<FromDTO> fromEmail, ILogger<MailjetProvider> logger)
         {
             this.client = client;
             this.fromEmail = fromEmail;
@@ -25,6 +25,8 @@ namespace TransactionalEmail.Infra.Providers
 
         public async Task<bool> SendEmailAsync(string email, string subject, string message)
         {
+            logger.LogInformation("Sending email using Mailjet provider");
+
             MailjetRequest request = new MailjetRequest
             {
                 Resource = Send.Resource,
@@ -33,7 +35,7 @@ namespace TransactionalEmail.Infra.Providers
             .Property(Send.FromName, fromEmail.Value.Name)
             .Property(Send.Subject, subject)
             .Property(Send.TextPart, message)
-            .Property(Send.HtmlPart, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
+            //.Property(Send.HtmlPart, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
             .Property(Send.Recipients, new JArray {
                 new JObject {
                     {
@@ -46,10 +48,12 @@ namespace TransactionalEmail.Infra.Providers
 
             if (!response.IsSuccessStatusCode)
             {
-                logger.LogError(response.StatusCode, response.GetErrorInfo());
+                logger.LogError("Status: {0}, Message: {1}", response.StatusCode.ToString(), response.GetErrorInfo());
+                return false;
             }
 
-            return response.IsSuccessStatusCode;
+            logger.LogInformation("Email sent using Mailjet provider");
+            return true;
         }
     }
 }

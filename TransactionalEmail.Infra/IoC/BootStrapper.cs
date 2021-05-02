@@ -13,7 +13,7 @@ namespace TransactionalEmail.Infra.Ioc
     {
         public static void InitializeServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var from = configuration.GetSection("MailSettings:From").Get<From>();
+            var from = configuration.GetSection("MailSettings:From").Get<FromDTO>();
 
             SenderConfiguration.Configure(services, options =>
             {

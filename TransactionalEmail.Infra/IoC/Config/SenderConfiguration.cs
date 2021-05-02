@@ -6,10 +6,10 @@ namespace TransactionalEmail.Infra.Ioc.Config
 {
     public static class SenderConfiguration
     {
-        internal static void Configure(IServiceCollection services, Action<From> senderSettings)
+        internal static void Configure(IServiceCollection services, Action<FromDTO> senderSettings)
         {
-            services.Configure<From>(senderSettings)
-                .PostConfigure<From>(options =>
+            services.Configure<FromDTO>(senderSettings)
+                .PostConfigure<FromDTO>(options =>
                 {
                     if (string.IsNullOrEmpty(options.Email))
                     {

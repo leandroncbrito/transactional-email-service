@@ -1,6 +1,6 @@
 namespace TransactionalEmail.Core.DTO
 {
-    public class From
+    public class FromDTO
     {
         public string Email { get; set; }
 
