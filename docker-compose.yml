@@ -3,15 +3,60 @@ version: '3.4'
 services:
   api:
     image: api
+    container_name: api
     build:
       context: .
       dockerfile: TransactionalEmail.Api/Dockerfile
     ports:
-      - "80:80"
+      - 80:80
+    depends_on:
+      - mongo
+    networks:
+      - te_local
+
   cli:
     image: cli
+    container_name: cli
     build:
       context: .
       dockerfile: TransactionalEmail.Cli/Dockerfile
     profiles:
       - cli
+    depends_on:
+      - mongo
+    networks:
+      - te_local
+
+  mongo:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    ports:
+      - 27017:27017
+    networks:
+      - te_local
+    volumes:
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    container_name: express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
+    depends_on:
+      - mongo
+    networks:
+      - te_local
+
+networks:
+  te_local:
+volumes:
+  mongo_data:
