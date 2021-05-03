@@ -2,7 +2,7 @@ namespace TransactionalEmail.Core.Options
 {
     public class MailSettingsOptions
     {
-        public int Retries { get; set; }
+        public RetryPolicyOptions RetryPolicy { get; set; } = new RetryPolicyOptions();
 
         public FromOptions From { get; set; } = new FromOptions();
     }

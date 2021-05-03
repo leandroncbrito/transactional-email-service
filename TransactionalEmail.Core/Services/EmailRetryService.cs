@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,13 +13,13 @@ namespace TransactionalEmail.Core.Services
     {
         private readonly IEmailService emailService;
         private readonly ILogger<EmailRetryService> logger;
-        private readonly int retriesCount = 3;
+        private readonly IOptions<RetryPolicyOptions> retrySettings;
 
-        public EmailRetryService(IEmailService emailService, IOptions<MailSettingsOptions> mailSettings, ILogger<EmailRetryService> logger)
+        public EmailRetryService(IEmailService emailService, IOptions<RetryPolicyOptions> retrySettings, ILogger<EmailRetryService> logger)
         {
             this.emailService = emailService;
             this.logger = logger;
-            this.retriesCount = mailSettings.Value.Retries;
+            this.retrySettings = retrySettings;
         }
 
         public async Task<bool> SendEmailAsync(EmailDTO emailDTO)
@@ -26,10 +27,19 @@ namespace TransactionalEmail.Core.Services
             try
             {
                 var attempts = 1;
+                var retryMaxAttempts = retrySettings.Value.Attempts;
+                var retryTime = TimeSpan.FromSeconds(retrySettings.Value.SecondsInterval);
 
-                while (attempts <= retriesCount)
+                do
                 {
                     logger.LogInformation("Attempt {0} to send email async", attempts);
+
+                    if (attempts > 1)
+                    {
+                        logger.LogInformation($"Waiting {retryTime.TotalSeconds} seconds to try again");
+
+                        Thread.Sleep((int)retryTime.TotalMilliseconds);
+                    }
 
                     var success = await emailService.SendEmailAsync(emailDTO);
 
@@ -39,9 +49,10 @@ namespace TransactionalEmail.Core.Services
                     }
 
                     attempts++;
-                }
 
-                logger.LogInformation($"Failed to send email async, attempts: {RetriesCount}");
+                } while (attempts <= retryMaxAttempts);
+
+                logger.LogInformation($"Failed to send email async, attempts: {retryMaxAttempts}");
 
                 return false;
             }
