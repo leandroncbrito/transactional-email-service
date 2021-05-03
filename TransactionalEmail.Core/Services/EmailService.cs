@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TransactionalEmail.Core.Interfaces;
-using TransactionalEmail.Core.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using TransactionalEmail.Core.DTO;
@@ -27,14 +26,12 @@ namespace TransactionalEmail.Core.Services
             {
                 foreach (var provider in providers)
                 {
-                    logger.LogInformation("Sending email async");
+                    logger.LogInformation("Provider found, sending email async");
 
                     var success = await provider.SendEmailAsync(emailDTO);
 
                     if (success)
                     {
-                        logger.LogInformation("Email successfully sent");
-
                         await emailLoggerService.Store(emailDTO);
 
                         return true;

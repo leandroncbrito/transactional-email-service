@@ -14,7 +14,6 @@ namespace TransactionalEmail.Infra.Ioc
         public static void InitializeServices(this IServiceCollection services, IConfiguration configuration)
         {
             var from = configuration.GetSection("MailSettings:From").Get<FromDTO>();
-
             SenderConfiguration.Configure(services, options =>
             {
                 options.Email = from.Email;
@@ -23,6 +22,7 @@ namespace TransactionalEmail.Infra.Ioc
 
             ProviderConfiguration.Configure(services, configuration.GetSection("MailSettings:Providers"));
 
+            services.AddSingleton<IEmailRetryDecorator, EmailRetryService>();
             services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<IEmailLoggerService, EmailLoggerService>();
             services.AddSingleton<IEmailRepository, EmailRepository>();

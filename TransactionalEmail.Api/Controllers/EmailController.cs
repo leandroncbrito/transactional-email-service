@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TransactionalEmail.Api.Requests;
-using TransactionalEmail.Api.Responses;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
 
@@ -12,9 +10,9 @@ namespace TransactionalEmail.Api.Controllers
     [Route("[controller]/[action]")]
     public class EmailController : ApiControllerBase
     {
-        private readonly IEmailService emailService;
+        private readonly IEmailRetryDecorator emailService;
 
-        public EmailController(IEmailService emailService)
+        public EmailController(IEmailRetryDecorator emailService)
         {
             this.emailService = emailService;
         }
