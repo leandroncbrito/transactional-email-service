@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TransactionalEmail.Core.DTO;
-using TransactionalEmail.Core.Interfaces;
-using TransactionalEmail.Core.Services;
+using TransactionalEmail.Core.Options;
 using TransactionalEmail.Infra.Ioc.Config;
-using TransactionalEmail.Infra.Data;
-using MongoDB.Driver;
 
 namespace TransactionalEmail.Infra.Ioc
 {
@@ -13,21 +9,11 @@ namespace TransactionalEmail.Infra.Ioc
     {
         public static void InitializeServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var from = configuration.GetSection("MailSettings:From").Get<FromDTO>();
-            SenderConfiguration.Configure(services, options =>
-            {
-                options.Email = from.Email;
-                options.Name = from.Name;
-            });
+            MailSettingsConfiguration.Configure(services, configuration.GetSection("MailSettings").Get<MailSettingsOptions>());
 
             ProviderConfiguration.Configure(services, configuration.GetSection("MailSettings:Providers"));
 
-            services.AddSingleton<IEmailRetryDecorator, EmailRetryService>();
-            services.AddSingleton<IEmailService, EmailService>();
-            services.AddSingleton<IEmailLoggerService, EmailLoggerService>();
-            services.AddSingleton<IEmailRepository, EmailRepository>();
-
-            services.AddSingleton<IMongoClient, MongoClient>(sp => new MongoClient(configuration.GetConnectionString("MongoDb")));
+            ServiceConfiguration.AddServices(services, configuration);
         }
     }
 }
