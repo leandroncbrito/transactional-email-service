@@ -8,22 +8,14 @@ namespace TransactionalEmail.Api.Controllers
     {
         public OkObjectResult OkRequestResponse(string message)
         {
-            var response = new EmailResponse()
-            {
-                Status = StatusCodes.Status200OK,
-                Title = message
-            };
+            var response = new ApiResponse(StatusCodes.Status200OK, message);
 
             return Ok(response);
         }
 
         public BadRequestObjectResult BadRequestResponse(string message)
         {
-            var response = new EmailResponse()
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Title = message
-            };
+            var response = new ApiResponse(StatusCodes.Status400BadRequest, message);
 
             return BadRequest(response);
         }
