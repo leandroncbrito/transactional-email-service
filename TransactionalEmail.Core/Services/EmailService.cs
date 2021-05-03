@@ -32,7 +32,7 @@ namespace TransactionalEmail.Core.Services
 
                     if (success)
                     {
-                        await emailLoggerService.Store(emailDTO);
+                        emailLoggerService.Store(emailDTO);
 
                         return true;
                     }
