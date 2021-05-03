@@ -1,6 +1,6 @@
-namespace TransactionalEmail.Core.DTO
+namespace TransactionalEmail.Core.Options
 {
-    public class FromDTO
+    public class FromOptions
     {
         public string Email { get; set; }
 

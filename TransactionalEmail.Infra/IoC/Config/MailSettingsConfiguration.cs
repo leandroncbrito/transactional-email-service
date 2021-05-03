@@ -1,0 +1,35 @@
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using TransactionalEmail.Core.Options;
+
+namespace TransactionalEmail.Infra.Ioc.Config
+{
+    public static class MailSettingsConfiguration
+    {
+        internal static void Configure(IServiceCollection services, MailSettingsOptions mailSettings)
+        {
+            services
+                .Configure<MailSettingsOptions>(options =>
+                {
+                    options.Retries = mailSettings.Retries;
+                })
+                .Configure<FromOptions>(options =>
+                {
+                    options.Email = mailSettings.From.Email;
+                    options.Name = mailSettings.From.Name;
+                })
+                .PostConfigure<FromOptions>(options =>
+                {
+                    if (string.IsNullOrEmpty(options.Email))
+                    {
+                        throw new Exception("From email is empty");
+                    }
+
+                    if (string.IsNullOrEmpty(options.Name))
+                    {
+                        throw new Exception("From name is empty");
+                    }
+                });
+        }
+    }
+}

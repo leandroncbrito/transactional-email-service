@@ -7,16 +7,17 @@ using Microsoft.Extensions.Options;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
 using Microsoft.Extensions.Logging;
+using TransactionalEmail.Core.Options;
 
 namespace TransactionalEmail.Infra.Providers
 {
     public class MailjetProvider : IMailProvider
     {
         private readonly IMailjetClient client;
-        private readonly IOptions<FromDTO> fromEmail;
+        private readonly IOptions<FromOptions> fromEmail;
         private readonly ILogger<MailjetProvider> logger;
 
-        public MailjetProvider(IMailjetClient client, IOptions<FromDTO> fromEmail, ILogger<MailjetProvider> logger)
+        public MailjetProvider(IMailjetClient client, IOptions<FromOptions> fromEmail, ILogger<MailjetProvider> logger)
         {
             this.client = client;
             this.fromEmail = fromEmail;

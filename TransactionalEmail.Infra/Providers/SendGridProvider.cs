@@ -6,16 +6,17 @@ using SendGrid.Helpers.Mail;
 using TransactionalEmail.Core.Interfaces;
 using TransactionalEmail.Core.DTO;
 using Microsoft.Extensions.Logging;
+using TransactionalEmail.Core.Options;
 
 namespace TransactionalEmail.Infra.Providers
 {
     public class SendGridProvider : IMailProvider
     {
         private readonly ISendGridClient client;
-        private readonly IOptions<FromDTO> fromEmail;
+        private readonly IOptions<FromOptions> fromEmail;
         private readonly ILogger<SendGridProvider> logger;
 
-        public SendGridProvider(ISendGridClient client, IOptions<FromDTO> fromEmail, ILogger<SendGridProvider> logger)
+        public SendGridProvider(ISendGridClient client, IOptions<FromOptions> fromEmail, ILogger<SendGridProvider> logger)
         {
             this.client = client;
             this.fromEmail = fromEmail;
