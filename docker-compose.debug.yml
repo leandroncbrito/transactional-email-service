@@ -14,3 +14,15 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+
+  cli:
+    image: cli
+    build:
+      context: .
+      dockerfile: TransactionalEmail.Cli/Dockerfile
+    ports:
+      - 5011:5011
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
