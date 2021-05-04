@@ -30,9 +30,11 @@ namespace TransactionalEmail.Infra.Providers
 
             var to = new EmailAddress(emailDTO.To, "Temporary user name");
 
-            var msg = MailHelper.CreateSingleEmail(from, to, emailDTO.Subject, emailDTO.Message, htmlContent);
+            var sendGridMessagge = MailHelper.CreateSingleEmail(from, to, emailDTO.Subject, emailDTO.Message, htmlContent);
 
-            var response = await client.SendEmailAsync(msg);
+            sendGridMessagge.SetSandBoxMode(IsTesting);
+
+            var response = await client.SendEmailAsync(sendGridMessagge);
 
             if (!response.IsSuccessStatusCode)
             {
