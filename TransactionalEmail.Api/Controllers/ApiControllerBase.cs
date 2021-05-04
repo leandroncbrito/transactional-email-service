@@ -4,16 +4,16 @@ using TransactionalEmail.Api.Responses;
 
 namespace TransactionalEmail.Api.Controllers
 {
-    public class ApiControllerBase : ControllerBase
+    public abstract class ApiControllerBase : ControllerBase
     {
-        public OkObjectResult OkRequestResponse(string message)
+        public OkObjectResult OkResponse(string message)
         {
             var response = new ApiResponse(StatusCodes.Status200OK, message);
 
             return Ok(response);
         }
 
-        public BadRequestObjectResult BadRequestResponse(string message)
+        public BadRequestObjectResult BadResponse(string message)
         {
             var response = new ApiResponse(StatusCodes.Status400BadRequest, message);
 

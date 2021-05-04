@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,10 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
-using TransactionalEmail.Core.Services;
 using TransactionalEmail.Infra.Ioc;
 
-namespace Cli
+namespace TransactionalEmail.Cli
 {
     internal class Program
     {

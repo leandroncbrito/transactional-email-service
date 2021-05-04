@@ -26,10 +26,10 @@ namespace TransactionalEmail.Api.Controllers
 
             if (!success)
             {
-                return BadRequestResponse("Error sending email");
+                return BadResponse("Error sending email");
             }
 
-            return OkRequestResponse("Email successfully sent");
+            return OkResponse("Email successfully sent");
         }
     }
 }

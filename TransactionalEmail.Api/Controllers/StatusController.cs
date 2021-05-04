@@ -4,12 +4,12 @@ namespace TransactionalEmail.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StatusController : ControllerBase
+    public class StatusController : ApiControllerBase
     {
         [HttpGet]
-        public string Get()
+        public ActionResult<string> Get()
         {
-            return "API is up and running";
+            return OkResponse("API is up and running");
         }
     }
 }
