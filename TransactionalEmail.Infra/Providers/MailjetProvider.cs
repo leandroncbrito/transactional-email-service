@@ -11,20 +11,17 @@ using TransactionalEmail.Core.Options;
 
 namespace TransactionalEmail.Infra.Providers
 {
-    public class MailjetProvider : IMailProvider
+    public class MailjetProvider : BaseProvider
     {
         private readonly IMailjetClient client;
-        private readonly IOptions<FromOptions> fromEmail;
-        private readonly ILogger<MailjetProvider> logger;
 
         public MailjetProvider(IMailjetClient client, IOptions<FromOptions> fromEmail, ILogger<MailjetProvider> logger)
+        : base(fromEmail, logger)
         {
             this.client = client;
-            this.fromEmail = fromEmail;
-            this.logger = logger;
         }
 
-        public async Task<bool> SendEmailAsync(EmailDTO emailDTO)
+        public override async Task<bool> SendEmailAsync(EmailDTO emailDTO)
         {
             logger.LogInformation("Sending email using Mailjet provider");
 

@@ -10,20 +10,17 @@ using TransactionalEmail.Core.Options;
 
 namespace TransactionalEmail.Infra.Providers
 {
-    public class SendGridProvider : IMailProvider
+    public class SendGridProvider : BaseProvider
     {
         private readonly ISendGridClient client;
-        private readonly IOptions<FromOptions> fromEmail;
-        private readonly ILogger<SendGridProvider> logger;
 
         public SendGridProvider(ISendGridClient client, IOptions<FromOptions> fromEmail, ILogger<SendGridProvider> logger)
+        : base(fromEmail, logger)
         {
             this.client = client;
-            this.fromEmail = fromEmail;
-            this.logger = logger;
         }
 
-        public async Task<bool> SendEmailAsync(EmailDTO emailDTO)
+        public override async Task<bool> SendEmailAsync(EmailDTO emailDTO)
         {
             logger.LogInformation("Sending email using Sendgrid provider");
 
