@@ -19,7 +19,7 @@ namespace TransactionalEmail.Core.Services
             this.logger = logger;
         }
 
-        public async Task Store(EmailDTO emailDTO)
+        public async void Store(EmailDTO emailDTO)
         {
             try
             {

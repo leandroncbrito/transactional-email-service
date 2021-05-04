@@ -5,6 +5,6 @@ namespace TransactionalEmail.Core.Interfaces
 {
     public interface IEmailLoggerService
     {
-        Task Store(EmailDTO email);
+        void Store(EmailDTO email);
     }
 }
