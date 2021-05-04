@@ -1,35 +1,34 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Services;
+using TransactionalEmail.Infra.Ioc;
 
 namespace Cli
 {
     internal class Program
     {
-        private static readonly AutoResetEvent _waitHandle = new AutoResetEvent(false);
-
-        static void Main()
+        static async Task Main(string[] args)
         {
-            // Handle Control+C or Control+Break
-            Console.CancelKeyPress += (o, e) =>
+            var host = CreateHostBuilder(args).Build();
+
+            using (var serviceScope = host.Services.CreateScope())
             {
-                Console.WriteLine("Exit");
-                // Allow the main thread to continue and exit...
-                _waitHandle.Set();
-            };
+                await Execute(serviceScope.ServiceProvider);
+            }
 
-            Execute().Wait();
+            Console.WriteLine("Press any key to exit");
 
-            Console.WriteLine("Press CTRL + C to exit");
-
-            // wait until Set method calls
-            _waitHandle.WaitOne();
+            Console.ReadKey();
         }
 
-        static async Task Execute()
+        static async Task Execute(IServiceProvider serviceProvider)
         {
             Console.WriteLine("\nTRANSACTIONAL EMAIL SERVICE");
 
@@ -43,22 +42,48 @@ namespace Cli
             Console.Write("Message: ");
             var message = Console.ReadLine();
 
-            var serviceProvider = Startup.ConfigureServices();
-
-            var emailService = serviceProvider.GetService<IEmailService>();
-
-            Console.WriteLine("\nSending email...");
+            var emailService = serviceProvider.GetService<IEmailRetryDecorator>();
 
             var emailDTO = new EmailDTO(to, subject, message);
 
-            var response = await emailService.SendEmailAsync(emailDTO);
+            Console.WriteLine("\nSending email...");
 
-            if (response)
+            var success = await emailService.SendEmailAsync(emailDTO);
+
+            if (!success)
             {
-                Console.WriteLine("Email successfully sent");
+                Console.WriteLine("Error sending email");
+                return;
             }
 
-            Console.WriteLine("Error sending email");
+            Console.WriteLine("Email successfully sent");
         }
+
+        static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+                .ConfigureHostConfiguration(config =>
+                {
+                    config.AddCommandLine(args);
+                    config.AddEnvironmentVariables();
+                })
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+                    config.AddEnvironmentVariables();
+                })
+                .ConfigureServices((hostingContext, services) =>
+                {
+                    services.InitializeServices(hostingContext.Configuration);
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                });
     }
 }
