@@ -1,8 +1,6 @@
-using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TransactionalEmail.Infra;
 using TransactionalEmail.Infra.Ioc;
 
 namespace Cli
@@ -19,6 +17,7 @@ namespace Cli
 
             return services.BuildServiceProvider();
         }
+
         private static IConfiguration LoadConfiguration()
         {
             var builder = new ConfigurationBuilder()

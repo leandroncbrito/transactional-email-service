@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
 
 namespace Cli
@@ -32,6 +33,7 @@ namespace Cli
         {
             Console.WriteLine("\nTRANSACTIONAL EMAIL SERVICE");
 
+            // @TODO: add input validation
             Console.Write("\nTo: ");
             var to = Console.ReadLine();
 
@@ -47,11 +49,13 @@ namespace Cli
 
             Console.WriteLine("\nSending email...");
 
-            var response = await emailService.SendEmailAsync(to, subject, message);
+            var emailDTO = new EmailDTO(to, subject, message);
+
+            var response = await emailService.SendEmailAsync(emailDTO);
 
             if (response)
             {
-                Console.WriteLine("Email sent successfully");
+                Console.WriteLine("Email successfully sent");
             }
 
             Console.WriteLine("Error sending email");

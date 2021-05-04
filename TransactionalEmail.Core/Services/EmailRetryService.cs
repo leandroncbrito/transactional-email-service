@@ -30,7 +30,7 @@ namespace TransactionalEmail.Core.Services
                 var retryMaxAttempts = retrySettings.Value.Attempts;
                 var retryTime = TimeSpan.FromSeconds(retrySettings.Value.SecondsInterval);
 
-                do
+                while (attempts <= retryMaxAttempts)
                 {
                     if (attempts > 1)
                     {
@@ -39,7 +39,7 @@ namespace TransactionalEmail.Core.Services
                         Thread.Sleep((int)retryTime.TotalMilliseconds);
                     }
 
-                    logger.LogInformation("Attempt {0} to send email async", attempts);
+                    logger.LogInformation($"Attempt {attempts} to send email async");
 
                     var success = await emailService.SendEmailAsync(emailDTO);
 
@@ -49,8 +49,7 @@ namespace TransactionalEmail.Core.Services
                     }
 
                     attempts++;
-
-                } while (attempts <= retryMaxAttempts);
+                }
 
                 logger.LogInformation($"Failed to send email async, attempts: {retryMaxAttempts}");
 
