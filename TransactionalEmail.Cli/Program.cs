@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
-using TransactionalEmail.Infra.Ioc;
+
 
 namespace TransactionalEmail.Cli
 {
@@ -14,7 +11,7 @@ namespace TransactionalEmail.Cli
     {
         static async Task Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            var host = Startup.CreateHostBuilder(args).Build();
 
             using (var serviceScope = host.Services.CreateScope())
             {
@@ -56,32 +53,5 @@ namespace TransactionalEmail.Cli
 
             Console.WriteLine("Email successfully sent");
         }
-
-        static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
-                .ConfigureHostConfiguration(config =>
-                {
-                    config.AddCommandLine(args);
-                    config.AddEnvironmentVariables();
-                })
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var env = hostingContext.HostingEnvironment;
-
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-                    config.AddEnvironmentVariables();
-                })
-                .ConfigureServices((hostingContext, services) =>
-                {
-                    services.InitializeServices(hostingContext.Configuration);
-                })
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                });
     }
 }
