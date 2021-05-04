@@ -32,14 +32,14 @@ namespace TransactionalEmail.Core.Services
 
                 do
                 {
-                    logger.LogInformation("Attempt {0} to send email async", attempts);
-
                     if (attempts > 1)
                     {
                         logger.LogInformation($"Waiting {retryTime.TotalSeconds} seconds to try again");
 
                         Thread.Sleep((int)retryTime.TotalMilliseconds);
                     }
+
+                    logger.LogInformation("Attempt {0} to send email async", attempts);
 
                     var success = await emailService.SendEmailAsync(emailDTO);
 
