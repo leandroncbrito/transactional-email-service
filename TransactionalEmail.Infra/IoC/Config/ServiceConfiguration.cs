@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using TransactionalEmail.Core.Interfaces;
 using TransactionalEmail.Core.Services;
-using TransactionalEmail.Infra.Data;
+using TransactionalEmail.Infra.Repositories;
 
 namespace TransactionalEmail.Infra.Ioc.Config
 {

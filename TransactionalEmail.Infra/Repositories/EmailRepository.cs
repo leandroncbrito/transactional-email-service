@@ -4,7 +4,7 @@ using TransactionalEmail.Core.Interfaces;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
-namespace TransactionalEmail.Infra.Data
+namespace TransactionalEmail.Infra.Repositories
 {
     public class EmailRepository : IEmailRepository
     {
