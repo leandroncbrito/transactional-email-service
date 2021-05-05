@@ -14,5 +14,7 @@ namespace TransactionalEmail.Api.Requests
 
         [Required]
         public string Message { get; set; }
+
+        public string Format { get; set; }
     }
 }

@@ -1,12 +1,16 @@
+using TransactionalEmail.Core.Constants;
+
 namespace TransactionalEmail.Core.DTO
 {
     public class EmailDTO
     {
-        public EmailDTO(string to, string subject, string message = "")
+
+        public EmailDTO(string to, string subject, string message = "", string format = EmailFormat.TEXT)
         {
             To = to;
             Subject = subject;
             Message = message;
+            Format = format;
 
             Validate();
         }
@@ -16,6 +20,15 @@ namespace TransactionalEmail.Core.DTO
         public string Subject { get; private set; }
 
         public string Message { get; private set; }
+
+        public string Format { get; private set; }
+
+        public string GetHtmlContent()
+        {
+            return Format == EmailFormat.HTML
+                ? Message
+                : "";
+        }
 
         private void Validate()
         {

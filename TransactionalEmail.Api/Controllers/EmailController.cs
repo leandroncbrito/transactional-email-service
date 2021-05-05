@@ -20,7 +20,7 @@ namespace TransactionalEmail.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Send(EmailRequest request)
         {
-            var emailDTO = new EmailDTO(request.To, request.Subject, request.Message);
+            var emailDTO = new EmailDTO(request.To, request.Subject, request.Message, request.Format);
 
             var success = await emailService.SendEmailAsync(emailDTO);
 

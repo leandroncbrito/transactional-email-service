@@ -23,13 +23,11 @@ namespace TransactionalEmail.Infra.Providers
         {
             Logger.LogInformation("Sending email using Sendgrid provider");
 
-            var htmlContent = "<strong>" + emailDTO.Message + "</strong>";
-
             var from = new EmailAddress(FromOptions.Email, FromOptions.Name);
 
             var to = new EmailAddress(emailDTO.To, "Temporary user name");
 
-            var sendGridMessagge = MailHelper.CreateSingleEmail(from, to, emailDTO.Subject, emailDTO.Message, htmlContent);
+            var sendGridMessagge = MailHelper.CreateSingleEmail(from, to, emailDTO.Subject, emailDTO.Message, emailDTO.GetHtmlContent());
 
             sendGridMessagge.SetSandBoxMode(IsTesting);
 

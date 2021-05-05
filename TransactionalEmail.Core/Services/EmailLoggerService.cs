@@ -25,7 +25,7 @@ namespace TransactionalEmail.Core.Services
             {
                 logger.LogInformation("Storing email sent");
 
-                var email = new Email(emailDTO.To, emailDTO.Subject, emailDTO.Message);
+                var email = new Email(emailDTO.To, emailDTO.Subject, emailDTO.Message, emailDTO.Format);
 
                 var response = await emailRepository.CreateAsync(email);
 

@@ -28,12 +28,12 @@ namespace TransactionalEmail.Infra.Providers
             {
                 Resource = Send.Resource,
             }
+            .Property(Send.SandboxMode, IsTesting)
             .Property(Send.FromEmail, FromOptions.Email)
             .Property(Send.FromName, FromOptions.Name)
             .Property(Send.Subject, emailDTO.Subject)
             .Property(Send.TextPart, emailDTO.Message)
-            .Property(Send.SandboxMode, IsTesting)
-            //.Property(Send.HtmlPart, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
+            .Property(Send.HtmlPart, emailDTO.GetHtmlContent())
             .Property(Send.Recipients, new JArray {
                 new JObject {
                     {

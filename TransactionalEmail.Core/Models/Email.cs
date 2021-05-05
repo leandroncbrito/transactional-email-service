@@ -6,11 +6,12 @@ namespace TransactionalEmail.Core.Models
 {
     public class Email
     {
-        public Email(string to, string subject, string message)
+        public Email(string to, string subject, string message, string format)
         {
             To = to;
             Subject = subject;
             Message = message;
+            Format = format;
         }
 
         [BsonId]
@@ -24,6 +25,9 @@ namespace TransactionalEmail.Core.Models
 
         [BsonElement("message")]
         public string Message { get; private set; }
+
+        [BsonElement("format")]
+        public string Format { get; private set; }
 
         [BsonElement("sent_date")]
         public DateTime SentDate { get; set; } = DateTime.Now;
