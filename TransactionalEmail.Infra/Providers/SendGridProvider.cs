@@ -10,23 +10,22 @@ using TransactionalEmail.Core.Options;
 
 namespace TransactionalEmail.Infra.Providers
 {
-    public class SendGridProvider : BaseProvider
+    public class SendGridProvider : BaseProvider, ISendGridProvider
     {
         private readonly ISendGridClient client;
 
-        public SendGridProvider(ISendGridClient client, IOptions<FromOptions> fromEmail, ILogger<SendGridProvider> logger)
-        : base(fromEmail, logger)
+        public SendGridProvider(ISendGridClient client, IOptions<FromOptions> from, ILogger<SendGridProvider> logger) : base(from, logger)
         {
             this.client = client;
         }
 
         public override async Task<bool> SendEmailAsync(EmailDTO emailDTO)
         {
-            logger.LogInformation("Sending email using Sendgrid provider");
+            Logger.LogInformation("Sending email using Sendgrid provider");
 
             var htmlContent = "<strong>" + emailDTO.Message + "</strong>";
 
-            var from = new EmailAddress(fromEmail.Value.Email, fromEmail.Value.Name);
+            var from = new EmailAddress(FromOptions.Email, FromOptions.Name);
 
             var to = new EmailAddress(emailDTO.To, "Temporary user name");
 
@@ -40,11 +39,11 @@ namespace TransactionalEmail.Infra.Providers
             {
                 var responseBody = await response.Body.ReadAsStringAsync();
 
-                logger.LogError("Status: {0}, Message: {1}", response.StatusCode.ToString(), responseBody);
+                Logger.LogError("Status: {0}, Message: {1}", response.StatusCode.ToString(), responseBody);
                 return false;
             }
 
-            logger.LogInformation("Email sent using Sendgrid provider");
+            Logger.LogInformation("Email sent using Sendgrid provider");
             return true;
         }
     }

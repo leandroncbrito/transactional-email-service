@@ -10,20 +10,30 @@ namespace TransactionalEmail.Infra.Providers
 {
     public abstract class BaseProvider : IMailProvider
     {
-        protected readonly IOptions<FromOptions> fromEmail;
+        protected readonly ILogger<IMailProvider> Logger;
 
-        protected readonly ILogger<IMailProvider> logger;
+        protected FromOptions FromOptions = new FromOptions();
 
         protected bool IsTesting => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Testing";
 
-        public BaseProvider(IOptions<FromOptions> fromEmail, ILogger<IMailProvider> logger)
+        public BaseProvider(IOptions<FromOptions> from, ILogger<IMailProvider> logger = null)
         {
-            this.fromEmail = fromEmail;
-            this.logger = logger;
+            FromOptions.Email = from.Value.Email;
+            FromOptions.Name = from.Value.Name;
+
+            Logger = logger;
 
             if (IsTesting)
             {
-                logger.LogWarning("Using Sandbox Mode");
+                LogSandboxMode();
+            }
+        }
+
+        private void LogSandboxMode()
+        {
+            if (Logger != null)
+            {
+                Logger.LogWarning("Using Sandbox Mode");
             }
         }
 

@@ -11,26 +11,25 @@ using TransactionalEmail.Core.Options;
 
 namespace TransactionalEmail.Infra.Providers
 {
-    public class MailjetProvider : BaseProvider
+    public class MailjetProvider : BaseProvider, IMailjetProvider
     {
         private readonly IMailjetClient client;
 
-        public MailjetProvider(IMailjetClient client, IOptions<FromOptions> fromEmail, ILogger<MailjetProvider> logger)
-        : base(fromEmail, logger)
+        public MailjetProvider(IMailjetClient client, IOptions<FromOptions> from, ILogger<MailjetProvider> logger) : base(from, logger)
         {
             this.client = client;
         }
 
         public override async Task<bool> SendEmailAsync(EmailDTO emailDTO)
         {
-            logger.LogInformation("Sending email using Mailjet provider");
+            Logger.LogInformation("Sending email using Mailjet provider");
 
             MailjetRequest request = new MailjetRequest
             {
                 Resource = Send.Resource,
             }
-            .Property(Send.FromEmail, fromEmail.Value.Email)
-            .Property(Send.FromName, fromEmail.Value.Name)
+            .Property(Send.FromEmail, FromOptions.Email)
+            .Property(Send.FromName, FromOptions.Name)
             .Property(Send.Subject, emailDTO.Subject)
             .Property(Send.TextPart, emailDTO.Message)
             .Property(Send.SandboxMode, IsTesting)
@@ -47,11 +46,11 @@ namespace TransactionalEmail.Infra.Providers
 
             if (!response.IsSuccessStatusCode)
             {
-                logger.LogError("Status: {0}, Message: {1}", response.StatusCode.ToString(), response.GetErrorInfo());
+                Logger.LogError("Status: {0}, Message: {1}", response.StatusCode.ToString(), response.GetErrorInfo());
                 return false;
             }
 
-            logger.LogInformation("Email sent using Mailjet provider");
+            Logger.LogInformation("Email sent using Mailjet provider");
             return true;
         }
     }

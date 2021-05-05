@@ -12,7 +12,10 @@ namespace TransactionalEmail.Infra.Ioc.Config
         internal static void Configure(IServiceCollection services, IConfigurationSection providerSettings)
         {
             services.AddSingleton<IMailProvider, SendGridProvider>();
+            services.AddSingleton<ISendGridProvider, SendGridProvider>();
+
             services.AddSingleton<IMailProvider, MailjetProvider>();
+            services.AddSingleton<IMailjetProvider, MailjetProvider>();
 
             services.AddSendGrid(options =>
             {
