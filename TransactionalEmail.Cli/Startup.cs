@@ -10,7 +10,7 @@ namespace TransactionalEmail.Cli
     {
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+                .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production")
                 .ConfigureHostConfiguration(config =>
                 {
                     config.AddCommandLine(args);

@@ -11,7 +11,7 @@ namespace TransactionalEmail.Tests
     {
         public void ConfigureHost(IHostBuilder hostBuilder) =>
             hostBuilder
-                .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+                .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production")
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var env = hostingContext.HostingEnvironment;
