@@ -25,7 +25,7 @@ namespace TransactionalEmail.Infra.Providers
 
             var from = new EmailAddress(FromOptions.Email, FromOptions.Name);
 
-            var to = new EmailAddress(emailDTO.To, "Temporary user name");
+            var to = new EmailAddress(emailDTO.To);
 
             var sendGridMessagge = MailHelper.CreateSingleEmail(from, to, emailDTO.Subject, emailDTO.Message, emailDTO.GetHtmlContent());
 

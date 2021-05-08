@@ -24,9 +24,11 @@ namespace TransactionalEmail.Core.Services
         {
             try
             {
+                logger.LogInformation("Sending email async");
+
                 foreach (var provider in providers)
                 {
-                    logger.LogInformation("Provider found, sending email async");
+                    logger.LogInformation("Provider found", provider);
 
                     var success = await provider.SendEmailAsync(emailDTO);
 
