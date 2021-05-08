@@ -6,13 +6,33 @@
     "configurations": [
         // Local
         {
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core Launch (api)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/TransactionalEmail.Api/bin/Debug/net5.0/TransactionalEmail.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/TransactionalEmail.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": ".NET Core Launch (consumer)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/TransactionalEmail.Consumer/bin/Debug/net5.0/TransactionalEmail.Consumer.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/TransactionalEmail.Consumer",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
