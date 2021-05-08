@@ -45,7 +45,7 @@ namespace TransactionalEmail.Consumer.Services
             var forgotPasswordEmail = new EmailClientRequest(
                 forgotRequest.Email,
                 "Reset your password",
-                $"Click on this link to create a new password <a href=\"{url}\">Reset</a>"
+                $"Click on this <a href=\"{url}\">link</a> to set a new password"
             );
 
             return await emailClient.SendEmailAsync(forgotPasswordEmail);
