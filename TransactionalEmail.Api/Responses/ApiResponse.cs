@@ -4,14 +4,17 @@ namespace TransactionalEmail.Api.Responses
     {
         public ApiResponse() { }
 
-        public ApiResponse(int status, string title)
+        public ApiResponse(int status, string title, bool success)
         {
             Status = status;
             Title = title;
+            Success = success;
         }
 
         public int Status { get; set; }
 
         public string Title { get; set; }
+
+        public bool Success { get; set; }
     }
 }

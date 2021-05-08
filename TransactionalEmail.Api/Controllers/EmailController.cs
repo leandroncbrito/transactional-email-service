@@ -36,6 +36,7 @@ namespace TransactionalEmail.Api.Controllers
             }
 
             logger.LogInformation("Email successfully sent");
+
             return OkResponse("Email successfully sent");
         }
     }

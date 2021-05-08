@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TransactionalEmail.Api.Controllers
 {
@@ -7,7 +8,7 @@ namespace TransactionalEmail.Api.Controllers
     public class StatusController : ApiControllerBase
     {
         [HttpGet]
-        public ActionResult<string> Get()
+        public IActionResult Get()
         {
             return OkResponse("API is up and running");
         }
