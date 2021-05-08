@@ -71,6 +71,19 @@ services:
     networks:
       - te_local
 
+  consumer:
+    image: consumer
+    container_name: consumer
+    build:
+      context: .
+      dockerfile: TransactionalEmail.Consumer/Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+    networks:
+      - te_local
+
 networks:
   te_local:
 volumes:
