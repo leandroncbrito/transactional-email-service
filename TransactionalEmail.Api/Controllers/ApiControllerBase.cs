@@ -4,6 +4,7 @@ using TransactionalEmail.Api.Responses;
 
 namespace TransactionalEmail.Api.Controllers
 {
+    [ApiController]
     public abstract class ApiControllerBase : ControllerBase
     {
         public OkObjectResult OkResponse(string message)

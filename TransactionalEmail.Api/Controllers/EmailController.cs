@@ -7,7 +7,6 @@ using TransactionalEmail.Core.Interfaces;
 
 namespace TransactionalEmail.Api.Controllers
 {
-    [ApiController]
     [Route("[controller]/[action]")]
     public class EmailController : ApiControllerBase
     {
