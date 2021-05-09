@@ -1,11 +1,14 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TransactionalEmail.Consumer.Helpers;
 using TransactionalEmail.Consumer.Requests;
 using TransactionalEmail.Consumer.Responses;
 using TransactionalEmail.Consumer.Services;
+using TransactionalEmail.Consumer.ValueObjects;
 
 namespace TransactionalEmail.Consumer.Controllers
 {
@@ -22,69 +25,69 @@ namespace TransactionalEmail.Consumer.Controllers
             this.logger = logger;
         }
 
-        [HttpPost("register")]
+        [HttpPost("register", Name = "register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             try
             {
                 logger.LogInformation("Registering new user endpoint");
 
-                var response = await accountService.RegisterAsync(request);
+                var register = new Register(request.Email);
 
-                if (!response.Success)
-                {
-                    //var errors = ModelState.Keys.SelectMany(key => ModelState[key].Errors.Select(x => x.ErrorMessage));
-                    logger.LogInformation("It was not possible to send the register email", response.Title);
-                    return BadRequest(response);
-                }
+                var response = await accountService.RegisterAsync(register);
 
                 logger.LogInformation("Register email sent successfully");
-                return Ok(response);
+
+                return Accepted(response);
             }
             catch (HttpRequestException ex)
             {
-                logger.LogError(ex.Message, ex);
+                logger.LogError($"It was not possible to send the register email to {request.Email}");
+                logger.LogCritical(ex.Message, ex);
+
                 var error = new HttpClientResponse(ex.StatusCode, ex.Message);
                 return BadRequest(error);
             }
         }
 
-        [HttpPost("forgot-password")]
+        [HttpPost("forgot-password", Name = "forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
             try
             {
+                var token = TokenHelper.Generate();
+
+                var validateUrl = UrlHelper.Generate(HttpContext.Request, Url.RouteUrl("validate-reset-token"), $"token={token}");
+
                 logger.LogInformation("Forgot password endpoint");
 
-                var response = await accountService.ForgotPasswordAsync(request);
+                var forgotPasswordDTO = new ForgotPassword(request.Email, validateUrl);
 
-                if (!response.Success)
-                {
-                    //var errors = ModelState.Keys.SelectMany(key => ModelState[key].Errors.Select(x => x.ErrorMessage));
-                    logger.LogInformation("It was not possible to send the forgot password email", response.Title);
-                    return BadRequest(response);
-                }
+                var response = await accountService.ForgotPasswordAsync(forgotPasswordDTO);
 
                 logger.LogInformation("Forgot password email sent successfully");
+
                 return Ok(response);
             }
             catch (HttpRequestException ex)
             {
-                logger.LogError(ex.Message, ex);
+                logger.LogError($"It was not possible to send the forgot password email to {request.Email}");
+                logger.LogCritical(ex.Message, ex);
+
                 var error = new HttpClientResponse(ex.StatusCode, ex.Message);
                 return BadRequest(error);
             }
         }
 
-        [HttpGet("validate-reset-token")]
+        [HttpGet("validate-reset-token", Name = "validate-reset-token")]
         public IActionResult ValidateResetToken([FromQuery] string token)
         {
-            var response = new HttpClientResponse(HttpStatusCode.OK, "Token is valid", true);
+            var response = new HttpClientResponse(HttpStatusCode.OK, "Token is valid");
 
             return Ok(response);
         }
 
-        [HttpPost("reset-password")]
+        [HttpPost("reset-password", Name = "reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
             try
@@ -100,10 +103,11 @@ namespace TransactionalEmail.Consumer.Controllers
 
                 return Ok();
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                logger.LogError(ex.Message, ex);
-                var error = new HttpClientResponse(ex.StatusCode, ex.Message);
+                logger.LogCritical(ex.Message, ex);
+
+                var error = new HttpClientResponse(HttpStatusCode.InternalServerError, ex.Message);
                 return BadRequest(error);
             }
         }
