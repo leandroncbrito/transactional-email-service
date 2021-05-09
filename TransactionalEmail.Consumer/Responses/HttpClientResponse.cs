@@ -11,11 +11,10 @@ namespace TransactionalEmail.Consumer.Responses
         {
         }
 
-        public HttpClientResponse(HttpStatusCode? status, string title, bool success = false)
+        public HttpClientResponse(HttpStatusCode? status, string title)
         {
             Status = status;
             Title = title;
-            Success = success;
         }
 
         [JsonPropertyNameAttribute("status")]
@@ -23,9 +22,6 @@ namespace TransactionalEmail.Consumer.Responses
 
         [JsonPropertyNameAttribute("title")]
         public string Title { get; set; }
-
-        [JsonPropertyNameAttribute("success")]
-        public bool Success { get; set; }
 
         // [JsonPropertyNameAttribute("errors")]
         // public IEnumerable<string> Errors { get; set; }
