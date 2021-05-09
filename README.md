@@ -1,16 +1,43 @@
 # TRANSACTIONAL EMAIL MICROSERVICE
 
 This transactional email microservice is responsible to streamline all transactional emails with a high degree of certainty.
-The email providers choose in this project were: Sendgrid and Mailjet (fallback)
+
+The email providers choosen in this project are: Sendgrid (main) and Mailjet (fallback)
+
+When the main provider is unavailable the fallback is called.
 
 ### Built With
-* [Dotnet Core 5.0](https://dotnet.microsoft.com/)
-* [MongoDB](https://www.mongodb.com/)
-* [xUnit.net](https://xunit.net/)
+- [Dotnet Core 5.0](https://dotnet.microsoft.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [xUnit.net](https://xunit.net/)
 
-## Choices made and why
+## Choices made
 
+### Queue
+The queuing technique used in this project is based on BackgroundService and Channel [reference](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-5.0&tabs=visual-studio#queued-background-tasks).
 
+In the Startup of the project a HostedService is initialized.
+When an email request is received by the API, it's enqueued to the background task queue by the channel to be processed.
+The background service reads the queue using the channel and try to send the email using the first provider, in case of fail,
+the service will use the fallback calling the second provider and so on.
+If all providers failed, the queue will wait 5 seconds to try again until the limit of retries set on the settings file.
+In case of success sending the email, a document is saved in the MongoDB.
+
+It's possible to change the **QueueCapacity** and **RetryPolicy** through appsettings.json file.
+
+  ```json
+  {
+    "QueueCapacity": 100,
+    "MailSettings" : {
+      "RetryPolicy": {
+        "Attempts": 3,
+        "SecondsInterval": 5
+      }
+    }
+  }
+  ```
+queue / channel
+mongodb - log
 
 ## Getting Started
 
@@ -146,6 +173,11 @@ To run the test suite use:
 ```bash
   docker-compose up test
 ```
+
+## Extra
+
+It's possible to look the MongoDB Emails collection through Mongo Express
+- http://localhost:8081
 
 ## Author
   - **Leandro Brito**
