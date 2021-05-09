@@ -9,6 +9,8 @@ namespace TransactionalEmail.Infra.Ioc
     {
         public static void InitializeServices(this IServiceCollection services, IConfiguration configuration)
         {
+            QueueSettingsConfiguration.Configure(services, configuration.GetSection("QueueSettings").Get<QueueSettingsOptions>());
+
             MailSettingsConfiguration.Configure(services, configuration.GetSection("MailSettings").Get<MailSettingsOptions>());
 
             ProviderConfiguration.Configure(services, configuration.GetSection("MailSettings:Providers"));

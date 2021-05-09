@@ -9,11 +9,6 @@ namespace TransactionalEmail.Infra.Ioc.Config
         internal static void Configure(IServiceCollection services, MailSettingsOptions mailSettings)
         {
             services
-                .Configure<RetryPolicyOptions>(options =>
-                {
-                    options.Attempts = mailSettings.RetryPolicy.Attempts;
-                    options.SecondsInterval = mailSettings.RetryPolicy.SecondsInterval;
-                })
                 .Configure<FromOptions>(options =>
                 {
                     options.Email = mailSettings.From.Email;

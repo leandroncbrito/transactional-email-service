@@ -14,17 +14,17 @@ namespace TransactionalEmail.Core.Services
         private EmailDTO Email { get; set; }
         private readonly IBackgroundTaskQueue taskQueue;
         private readonly IEmailService emailService;
-        private readonly IOptions<RetryPolicyOptions> retrySettings;
+        private readonly IOptions<QueueSettingsOptions> queueSettings;
         private readonly ILogger<EmailQueueService> logger;
 
         public EmailQueueService(IBackgroundTaskQueue taskQueue,
             IEmailService emailService,
-            IOptions<RetryPolicyOptions> retrySettings,
+            IOptions<QueueSettingsOptions> queueSettings,
             ILogger<EmailQueueService> logger)
         {
             this.taskQueue = taskQueue;
             this.emailService = emailService;
-            this.retrySettings = retrySettings;
+            this.queueSettings = queueSettings;
             this.logger = logger;
         }
 
@@ -38,8 +38,8 @@ namespace TransactionalEmail.Core.Services
         private async ValueTask BuildWorkItem(CancellationToken token)
         {
             var attempts = 1;
-            var retryMaxAttempts = retrySettings.Value.Attempts;
-            var retryTime = TimeSpan.FromSeconds(retrySettings.Value.SecondsInterval);
+            var retryMaxAttempts = queueSettings.Value.Attempts;
+            var retryTime = TimeSpan.FromSeconds(queueSettings.Value.SecondsInterval);
 
             while (!token.IsCancellationRequested && attempts <= retryMaxAttempts)
             {

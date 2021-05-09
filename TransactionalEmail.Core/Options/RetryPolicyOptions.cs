@@ -1,9 +1,7 @@
-namespace TransactionalEmail.Core.Options
-{
-    public class RetryPolicyOptions
-    {
-        public int Attempts { get; set; } = 1;
+// namespace TransactionalEmail.Core.Options
+// {
+//     public class RetryPolicyOptions
+//     {
 
-        public int SecondsInterval { get; set; } = 0;
-    }
-}
+//     }
+// }

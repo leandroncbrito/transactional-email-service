@@ -29,17 +29,6 @@ namespace Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
             });
 
-            services.AddHostedService<QueuedHostedService>();
-            services.AddSingleton<IBackgroundTaskQueue>(ctx =>
-            {
-                if (!int.TryParse(Configuration["QueueCapacity"], out var queueCapacity))
-                {
-                    queueCapacity = 100;
-                }
-
-                return new BackgroundTaskQueue(queueCapacity);
-            });
-
             services.InitializeServices(Configuration);
         }
 
