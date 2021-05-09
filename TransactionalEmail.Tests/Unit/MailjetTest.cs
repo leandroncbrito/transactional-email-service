@@ -15,7 +15,7 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailWithoutMessageIsPermitted()
         {
-            var emailValueObject = new EmailValueObject(ToEmail, "Subject");
+            var emailValueObject = new EmailValueObject(Recipients, "Subject");
 
             var success = await mailjetProvider.SendEmailAsync(emailValueObject);
 

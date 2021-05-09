@@ -18,7 +18,7 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailDefaultFormatSuccessfully()
         {
-            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "Message");
+            var emailValueObject = new EmailValueObject(Recipients, "Subject", "Message");
 
             var success = await emailProvider.SendEmailAsync(emailValueObject);
 
@@ -28,7 +28,7 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailWithTextFormatSuccessfully()
         {
-            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "Message text", EmailFormat.TEXT);
+            var emailValueObject = new EmailValueObject(Recipients, "Subject", "Message text", EmailFormat.TEXT);
 
             var success = await emailProvider.SendEmailAsync(emailValueObject);
 
@@ -38,7 +38,7 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailWithHtmlFormatSuccessfully()
         {
-            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "<strong>Html strong</strong>", EmailFormat.HTML);
+            var emailValueObject = new EmailValueObject(Recipients, "Subject", "<strong>Html strong</strong>", EmailFormat.HTML);
 
             var success = await emailProvider.SendEmailAsync(emailValueObject);
 
@@ -48,7 +48,7 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailWithMarkdownFormatSuccessfully()
         {
-            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "## Heading level 2", EmailFormat.MARKDOWN);
+            var emailValueObject = new EmailValueObject(Recipients, "Subject", "## Heading level 2", EmailFormat.MARKDOWN);
 
             var success = await emailProvider.SendEmailAsync(emailValueObject);
 
