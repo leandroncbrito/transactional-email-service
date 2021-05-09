@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 using TransactionalEmail.Core.Interfaces.Providers;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Constants;
 
 namespace TransactionalEmail.Tests.Unit
@@ -18,9 +18,9 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailSuccessfully()
         {
-            var emailDTO = new EmailDTO(ToEmail, "Subject", "Message");
+            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "Message");
 
-            var success = await emailProvider.SendEmailAsync(emailDTO);
+            var success = await emailProvider.SendEmailAsync(emailValueObject);
 
             Assert.True(success);
         }
@@ -28,9 +28,9 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailWithHtmlContentSuccessfully()
         {
-            var emailDTO = new EmailDTO(ToEmail, "Subject", "<strong>Message</strong>", EmailFormat.HTML);
+            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "<strong>Message</strong>", EmailFormat.HTML);
 
-            var success = await emailProvider.SendEmailAsync(emailDTO);
+            var success = await emailProvider.SendEmailAsync(emailValueObject);
 
             Assert.True(success);
         }

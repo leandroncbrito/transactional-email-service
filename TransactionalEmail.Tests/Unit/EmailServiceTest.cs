@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Constants;
 using TransactionalEmail.Core.Interfaces.Services;
 
@@ -18,9 +18,9 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailSuccessfully()
         {
-            var emailDTO = new EmailDTO(ToEmail, "Subject", "Message");
+            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "Message");
 
-            var success = await emailService.SendEmailAsync(emailDTO);
+            var success = await emailService.SendEmailAsync(emailValueObject);
 
             Assert.True(success);
         }
@@ -28,9 +28,9 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailWithHtmlContentSuccessfully()
         {
-            var emailDTO = new EmailDTO(ToEmail, "Subject", "<strong>Message</strong>", EmailFormat.HTML);
+            var emailValueObject = new EmailValueObject(ToEmail, "Subject", "<strong>Message</strong>", EmailFormat.HTML);
 
-            var success = await emailService.SendEmailAsync(emailDTO);
+            var success = await emailService.SendEmailAsync(emailValueObject);
 
             Assert.True(success);
         }
@@ -42,7 +42,7 @@ namespace TransactionalEmail.Tests.Unit
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                new EmailDTO(to, "Subject", "Message");
+                new EmailValueObject(to, "Subject", "Message");
             });
         }
 
@@ -51,7 +51,7 @@ namespace TransactionalEmail.Tests.Unit
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                new EmailDTO(ToEmail, null, "Message");
+                new EmailValueObject(ToEmail, null, "Message");
             });
         }
     }

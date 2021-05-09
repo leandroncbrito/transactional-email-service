@@ -1,9 +1,9 @@
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 
 namespace TransactionalEmail.Core.Interfaces.Services
 {
     public interface IEmailLoggerService
     {
-        void Store(EmailDTO email);
+        void Store(EmailValueObject emailValueObject);
     }
 }

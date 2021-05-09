@@ -1,4 +1,4 @@
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Providers;
 using Xunit;
 
@@ -15,9 +15,9 @@ namespace TransactionalEmail.Tests.Unit
         [Fact]
         public async void SendEmailWithoutMessageIsPermitted()
         {
-            var emailDTO = new EmailDTO(ToEmail, "Subject");
+            var emailValueObject = new EmailValueObject(ToEmail, "Subject");
 
-            var success = await mailjetProvider.SendEmailAsync(emailDTO);
+            var success = await mailjetProvider.SendEmailAsync(emailValueObject);
 
             Assert.True(success);
         }

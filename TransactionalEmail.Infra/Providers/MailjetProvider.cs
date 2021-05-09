@@ -4,7 +4,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Providers;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.Options;
@@ -20,7 +20,7 @@ namespace TransactionalEmail.Infra.Providers
             this.client = client;
         }
 
-        public override async Task<bool> SendEmailAsync(EmailDTO emailDTO)
+        public override async Task<bool> SendEmailAsync(EmailValueObject emailValueObject)
         {
             Logger.LogInformation("Sending email using Mailjet provider");
 
@@ -31,13 +31,13 @@ namespace TransactionalEmail.Infra.Providers
             .Property(Send.SandboxMode, IsTesting)
             .Property(Send.FromEmail, FromOptions.Email)
             .Property(Send.FromName, FromOptions.Name)
-            .Property(Send.Subject, emailDTO.Subject)
-            .Property(Send.TextPart, emailDTO.Message)
-            .Property(Send.HtmlPart, emailDTO.GetHtmlContent())
+            .Property(Send.Subject, emailValueObject.Subject)
+            .Property(Send.TextPart, emailValueObject.Message)
+            .Property(Send.HtmlPart, emailValueObject.GetHtmlContent())
             .Property(Send.Recipients, new JArray {
                 new JObject {
                     {
-                        "Email", emailDTO.To
+                        "Email", emailValueObject.To
                     }
                 }
             });

@@ -1,11 +1,11 @@
 using TransactionalEmail.Core.Constants;
 
-namespace TransactionalEmail.Core.DTO
+namespace TransactionalEmail.Core.ValueObjects
 {
-    public class EmailDTO
+    public class EmailValueObject
     {
 
-        public EmailDTO(string to, string subject, string message = "", string format = EmailFormat.TEXT)
+        public EmailValueObject(string to, string subject, string message = "", string format = EmailFormat.TEXT)
         {
             To = to;
             Subject = subject;

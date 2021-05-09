@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using TransactionalEmail.Core.Interfaces.Providers;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.Options;
 
@@ -19,15 +19,15 @@ namespace TransactionalEmail.Infra.Providers
             this.client = client;
         }
 
-        public override async Task<bool> SendEmailAsync(EmailDTO emailDTO)
+        public override async Task<bool> SendEmailAsync(EmailValueObject emailValueObject)
         {
             Logger.LogInformation("Sending email using Sendgrid provider");
 
             var from = new EmailAddress(FromOptions.Email, FromOptions.Name);
 
-            var to = new EmailAddress(emailDTO.To);
+            var to = new EmailAddress(emailValueObject.To);
 
-            var sendGridMessagge = MailHelper.CreateSingleEmail(from, to, emailDTO.Subject, emailDTO.Message, emailDTO.GetHtmlContent());
+            var sendGridMessagge = MailHelper.CreateSingleEmail(from, to, emailValueObject.Subject, emailValueObject.Message, emailValueObject.GetHtmlContent());
 
             sendGridMessagge.SetSandBoxMode(IsTesting);
 

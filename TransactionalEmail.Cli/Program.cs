@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using TransactionalEmail.Core.DTO;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Services;
 
 namespace TransactionalEmail.Cli
@@ -37,21 +36,15 @@ namespace TransactionalEmail.Cli
             Console.Write("Message: ");
             var message = Console.ReadLine();
 
-            var emailService = serviceProvider.GetService<IEmailService>();
+            var emailService = serviceProvider.GetService<IEmailQueueService>();
 
-            var emailDTO = new EmailDTO(to, subject, message);
+            var emailValueObject = new EmailValueObject(to, subject, message);
 
             Console.WriteLine("\nSending email...");
 
-            var success = await emailService.SendEmailAsync(emailDTO);
+            await emailService.Enqueue(emailValueObject);
 
-            if (!success)
-            {
-                Console.WriteLine("Error sending email");
-                return;
-            }
-
-            Console.WriteLine("Email successfully sent");
+            Console.WriteLine("Email added to the queue");
         }
     }
 }

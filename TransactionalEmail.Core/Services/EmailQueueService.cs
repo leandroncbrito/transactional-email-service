@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Queue;
 using TransactionalEmail.Core.Interfaces.Services;
 using TransactionalEmail.Core.Options;
@@ -12,7 +12,7 @@ namespace TransactionalEmail.Core.Services
 {
     public class EmailQueueService : IEmailQueueService
     {
-        private EmailDTO Email { get; set; }
+        private EmailValueObject Email { get; set; }
         private readonly IBackgroundTaskQueue taskQueue;
         private readonly IEmailService emailService;
         private readonly IOptions<QueueSettingsOptions> queueSettings;
@@ -29,9 +29,9 @@ namespace TransactionalEmail.Core.Services
             this.logger = logger;
         }
 
-        public async ValueTask Enqueue(EmailDTO email)
+        public async ValueTask Enqueue(EmailValueObject emailValueObject)
         {
-            Email = email;
+            Email = emailValueObject;
 
             await taskQueue.QueueBackgroundWorkItemAsync(BuildWorkItem);
         }

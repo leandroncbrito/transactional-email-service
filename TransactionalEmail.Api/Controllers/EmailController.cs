@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Api.Requests;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Services;
 
 namespace TransactionalEmail.Api.Controllers
@@ -24,11 +24,11 @@ namespace TransactionalEmail.Api.Controllers
         {
             logger.LogInformation("Email request received", request);
 
-            var emailDTO = new EmailDTO(request.To, request.Subject, request.Message, request.Format);
+            var emailValueObject = new EmailValueObject(request.To, request.Subject, request.Message, request.Format);
 
-            await emailQueueService.Enqueue(emailDTO);
+            await emailQueueService.Enqueue(emailValueObject);
 
-            logger.LogInformation("Email added to the queue", emailDTO);
+            logger.LogInformation("Email added to the queue", emailValueObject);
 
             return AcceptedResponse("Email added to the queue");
         }

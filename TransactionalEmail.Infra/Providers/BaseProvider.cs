@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Providers;
 using TransactionalEmail.Core.Options;
 
@@ -37,6 +37,6 @@ namespace TransactionalEmail.Infra.Providers
             }
         }
 
-        public abstract Task<bool> SendEmailAsync(EmailDTO emailDTO);
+        public abstract Task<bool> SendEmailAsync(EmailValueObject emailValueObject);
     }
 }

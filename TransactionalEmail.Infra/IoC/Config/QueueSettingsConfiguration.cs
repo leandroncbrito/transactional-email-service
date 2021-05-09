@@ -11,10 +11,7 @@ namespace TransactionalEmail.Infra.Ioc.Config
         {
             services
                 .AddHostedService<QueuedHostedService>()
-                .AddSingleton<IBackgroundTaskQueue>(ctx =>
-                {
-                    return new BackgroundTaskQueue(queueSettings.Capacity);
-                })
+                .AddSingleton<IBackgroundTaskQueue>(new BackgroundTaskQueue(queueSettings.Capacity))
                 .Configure<QueueSettingsOptions>(options =>
                 {
                     options.Capacity = queueSettings.Capacity;

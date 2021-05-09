@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TransactionalEmail.Core.Interfaces.Providers;
 using Microsoft.Extensions.Logging;
 using System;
-using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Services;
 
 namespace TransactionalEmail.Core.Services
@@ -21,7 +21,7 @@ namespace TransactionalEmail.Core.Services
             this.logger = logger;
         }
 
-        public async Task<bool> SendEmailAsync(EmailDTO emailDTO)
+        public async Task<bool> SendEmailAsync(EmailValueObject emailValueObject)
         {
             try
             {
@@ -31,11 +31,11 @@ namespace TransactionalEmail.Core.Services
                 {
                     logger.LogInformation("Provider found", provider);
 
-                    var success = await provider.SendEmailAsync(emailDTO);
+                    var success = await provider.SendEmailAsync(emailValueObject);
 
                     if (success)
                     {
-                        emailLoggerService.Store(emailDTO);
+                        emailLoggerService.Store(emailValueObject);
 
                         return true;
                     }
