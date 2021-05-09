@@ -24,6 +24,18 @@ namespace TransactionalEmail.Infra.Providers
         {
             Logger.LogInformation("Sending email using Mailjet provider");
 
+            var recipients = new JArray();
+            foreach (var to in emailValueObject.Recipients)
+            {
+                var toEmail = new JObject
+                {
+                    { "Email", to.Email },
+                    { "Name", to.Name }
+                };
+
+                recipients.Add(toEmail);
+            }
+
             MailjetRequest request = new MailjetRequest
             {
                 Resource = Send.Resource,
@@ -34,13 +46,7 @@ namespace TransactionalEmail.Infra.Providers
             .Property(Send.Subject, emailValueObject.Subject)
             .Property(Send.TextPart, emailValueObject.Message)
             .Property(Send.HtmlPart, emailValueObject.GetHtmlContent())
-            .Property(Send.Recipients, new JArray {
-                new JObject {
-                    {
-                        "Email", emailValueObject.To
-                    }
-                }
-            });
+            .Property(Send.Recipients, recipients);
 
             var response = await client.PostAsync(request);
 

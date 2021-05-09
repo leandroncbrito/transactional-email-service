@@ -7,6 +7,7 @@ using TransactionalEmail.Core.Interfaces.Providers;
 using TransactionalEmail.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.Options;
+using System.Collections.Generic;
 
 namespace TransactionalEmail.Infra.Providers
 {
@@ -25,9 +26,13 @@ namespace TransactionalEmail.Infra.Providers
 
             var from = new EmailAddress(FromOptions.Email, FromOptions.Name);
 
-            var to = new EmailAddress(emailValueObject.To);
+            var recipients = new List<EmailAddress>();
+            foreach (var to in emailValueObject.Recipients)
+            {
+                recipients.Add(new EmailAddress(to.Email, to.Name));
+            }
 
-            var sendGridMessagge = MailHelper.CreateSingleEmail(from, to, emailValueObject.Subject, emailValueObject.Message, emailValueObject.GetHtmlContent());
+            var sendGridMessagge = MailHelper.CreateSingleEmailToMultipleRecipients(from, recipients, emailValueObject.Subject, emailValueObject.Message, emailValueObject.GetHtmlContent());
 
             sendGridMessagge.SetSandBoxMode(IsTesting);
 
