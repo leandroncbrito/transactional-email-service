@@ -1,14 +1,20 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using HeyRed.MarkdownSharp;
 using TransactionalEmail.Core.Constants;
+using TransactionalEmail.Core.DTO;
 
 namespace TransactionalEmail.Core.ValueObjects
 {
     public class EmailValueObject
     {
 
-        public EmailValueObject(string to, string subject, string message = "", string format = EmailFormat.TEXT)
+        public EmailValueObject(IEnumerable<To> recipients, string subject, string message = "", string format = EmailFormat.TEXT)
         {
-            To = to;
+            Recipients = recipients;
             Subject = subject;
             Message = message;
             Format = format;
@@ -16,7 +22,7 @@ namespace TransactionalEmail.Core.ValueObjects
             Initialize();
         }
 
-        public string To { get; private set; }
+        public IEnumerable<To> Recipients { get; set; }
 
         public string Subject { get; private set; }
 
@@ -51,14 +57,29 @@ namespace TransactionalEmail.Core.ValueObjects
 
         private void Validate()
         {
-            if (string.IsNullOrEmpty(To))
+            var emailAttribute = new EmailAddressAttribute();
+
+            if (Recipients.ToList().Count == 0)
             {
-                throw new System.ArgumentNullException("To is null or empty");
+                throw new ArgumentNullException("Recipients is empty");
+            }
+
+            foreach (var recipient in Recipients)
+            {
+                if (string.IsNullOrEmpty(recipient.Email))
+                {
+                    throw new ArgumentNullException("Email is null or empty");
+                }
+
+                if (!emailAttribute.IsValid(recipient.Email))
+                {
+                    throw new ArgumentException();
+                }
             }
 
             if (string.IsNullOrEmpty(Subject))
             {
-                throw new System.ArgumentNullException("Subject is null or empty");
+                throw new ArgumentNullException("Subject is null or empty");
             }
         }
     }
