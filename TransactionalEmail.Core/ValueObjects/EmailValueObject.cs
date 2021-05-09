@@ -1,3 +1,4 @@
+using HeyRed.MarkdownSharp;
 using TransactionalEmail.Core.Constants;
 
 namespace TransactionalEmail.Core.ValueObjects
@@ -12,7 +13,7 @@ namespace TransactionalEmail.Core.ValueObjects
             Message = message;
             Format = format;
 
-            Validate();
+            Initialize();
         }
 
         public string To { get; private set; }
@@ -23,11 +24,29 @@ namespace TransactionalEmail.Core.ValueObjects
 
         public string Format { get; private set; }
 
+        private string HtmlContent { get; set; }
+
         public string GetHtmlContent()
         {
-            return Format == EmailFormat.HTML
-                ? Message
-                : "";
+            if (Format == EmailFormat.TEXT)
+                return "";
+
+            return Message;
+        }
+
+        private void Initialize()
+        {
+            Validate();
+
+            if (Format == EmailFormat.MARKDOWN)
+            {
+                FormatMarkdown();
+            }
+        }
+        private void FormatMarkdown()
+        {
+            var markdown = new Markdown();
+            Message = markdown.Transform(Message);
         }
 
         private void Validate()

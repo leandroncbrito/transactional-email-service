@@ -4,5 +4,6 @@ namespace TransactionalEmail.Core.Constants
     {
         public const string TEXT = "text";
         public const string HTML = "html";
+        public const string MARKDOWN = "markdown";
     }
 }
