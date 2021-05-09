@@ -37,7 +37,7 @@ namespace TransactionalEmail.Cli
             Console.Write("Message: ");
             var message = Console.ReadLine();
 
-            var emailService = serviceProvider.GetService<IEmailRetryDecorator>();
+            var emailService = serviceProvider.GetService<IEmailService>();
 
             var emailDTO = new EmailDTO(to, subject, message);
 
