@@ -7,6 +7,10 @@ using Microsoft.OpenApi.Models;
 using TransactionalEmail.Infra.Ioc;
 using TransactionalEmail.Core.Interfaces;
 using TransactionalEmail.Infra.Queue;
+using TransactionalEmail.Core.Options;
+using TransactionalEmail.Core.Interfaces.Queue;
+using TransactionalEmail.Core.Services;
+using TransactionalEmail.Core.Interfaces.Services;
 
 namespace Api
 {
@@ -28,6 +32,19 @@ namespace Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
             });
+
+            var queueSettings = Configuration.GetSection("QueueSettings").Get<QueueSettingsOptions>();
+
+            services.AddHostedService<QueuedHostedService>()
+                .AddSingleton<IBackgroundTaskQueue>(new BackgroundTaskQueue(queueSettings.Capacity))
+                .Configure<QueueSettingsOptions>(options =>
+                {
+                    options.Capacity = queueSettings.Capacity;
+                    options.Attempts = queueSettings.Attempts;
+                    options.SecondsInterval = queueSettings.SecondsInterval;
+                });
+
+            services.AddSingleton<IEmailQueueService, EmailQueueService>();
 
             services.InitializeServices(Configuration);
         }
