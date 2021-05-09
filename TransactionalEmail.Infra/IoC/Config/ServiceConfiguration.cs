@@ -12,7 +12,7 @@ namespace TransactionalEmail.Infra.Ioc.Config
     {
         internal static void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IEmailRetryDecorator, EmailRetryService>();
+            services.AddSingleton<IEmailQueueService, EmailQueueService>();
             services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<IEmailLoggerService, EmailLoggerService>();
             services.AddSingleton<IEmailRepository, EmailRepository>();

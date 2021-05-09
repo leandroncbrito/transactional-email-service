@@ -11,12 +11,12 @@ namespace TransactionalEmail.Api.Controllers
     [Route("[controller]/[action]")]
     public class EmailController : ApiControllerBase
     {
-        private readonly IEmailRetryDecorator emailService;
+        private readonly IEmailQueueService emailQueueService;
         private readonly ILogger<EmailController> logger;
 
-        public EmailController(IEmailRetryDecorator emailService, ILogger<EmailController> logger)
+        public EmailController(IEmailQueueService emailQueueService, ILogger<EmailController> logger)
         {
-            this.emailService = emailService;
+            this.emailQueueService = emailQueueService;
             this.logger = logger;
         }
 
@@ -27,17 +27,11 @@ namespace TransactionalEmail.Api.Controllers
 
             var emailDTO = new EmailDTO(request.To, request.Subject, request.Message, request.Format);
 
-            var success = await emailService.SendEmailAsync(emailDTO);
+            await emailQueueService.Enqueue(emailDTO);
 
-            if (!success)
-            {
-                logger.LogError("Error trying to send email", request);
-                return BadResponse("Error trying to send email");
-            }
+            logger.LogInformation("Email added to the queue", emailDTO);
 
-            logger.LogInformation("Email successfully sent");
-
-            return OkResponse("Email successfully sent");
+            return AcceptedResponse("Email added to the queue");
         }
     }
 }
