@@ -26,6 +26,11 @@ namespace TransactionalEmail.Consumer
         {
             services.AddControllers();
 
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TransactionalEmail.Consumer", Version = "v1" });

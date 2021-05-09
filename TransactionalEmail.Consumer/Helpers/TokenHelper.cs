@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace TransactionalEmail.Consumer.Helpers
 {
-    public static class Token
+    public static class TokenHelper
     {
         public static string Generate()
         {
