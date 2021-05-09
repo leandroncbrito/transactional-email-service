@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using TransactionalEmail.Core.DTO;
 
-namespace TransactionalEmail.Core.Interfaces
+namespace TransactionalEmail.Core.Interfaces.Services
 {
     public interface IEmailService
     {

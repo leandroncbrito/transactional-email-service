@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid.Extensions.DependencyInjection;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Providers;
 using TransactionalEmail.Infra.Providers;
 
 namespace TransactionalEmail.Infra.Ioc.Config

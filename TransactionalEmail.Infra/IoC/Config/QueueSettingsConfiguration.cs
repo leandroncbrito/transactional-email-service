@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Queue;
 using TransactionalEmail.Core.Options;
 using TransactionalEmail.Infra.Queue;
 

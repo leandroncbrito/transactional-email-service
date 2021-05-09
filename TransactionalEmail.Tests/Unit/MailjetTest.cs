@@ -1,5 +1,5 @@
 using TransactionalEmail.Core.DTO;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Providers;
 using Xunit;
 
 namespace TransactionalEmail.Tests.Unit

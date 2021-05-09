@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Api.Requests;
 using TransactionalEmail.Core.DTO;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Services;
 
 namespace TransactionalEmail.Api.Controllers
 {

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Providers;
 using Microsoft.Extensions.Logging;
 using System;
 using TransactionalEmail.Core.DTO;
+using TransactionalEmail.Core.Interfaces.Services;
 
 namespace TransactionalEmail.Core.Services
 {

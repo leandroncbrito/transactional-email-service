@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Interfaces;
-
+using TransactionalEmail.Core.Interfaces.Services;
 
 namespace TransactionalEmail.Cli
 {

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using TransactionalEmail.Core.DTO;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Providers;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.Options;
 

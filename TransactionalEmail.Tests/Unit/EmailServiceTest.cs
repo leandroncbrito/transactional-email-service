@@ -1,9 +1,8 @@
 using System;
 using Xunit;
-using TransactionalEmail.Core.Services;
-using TransactionalEmail.Core.Interfaces;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Constants;
+using TransactionalEmail.Core.Interfaces.Services;
 
 namespace TransactionalEmail.Tests.Unit
 {

@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Providers;
 using TransactionalEmail.Core.DTO;
 using TransactionalEmail.Core.Constants;
 

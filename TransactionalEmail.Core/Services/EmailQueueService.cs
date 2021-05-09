@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TransactionalEmail.Core.DTO;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Queue;
+using TransactionalEmail.Core.Interfaces.Services;
 using TransactionalEmail.Core.Options;
 
 namespace TransactionalEmail.Core.Services

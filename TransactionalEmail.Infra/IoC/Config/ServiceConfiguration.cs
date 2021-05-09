@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Queue;
+using TransactionalEmail.Core.Interfaces.Repositories;
+using TransactionalEmail.Core.Interfaces.Services;
 using TransactionalEmail.Core.Services;
 using TransactionalEmail.Infra.Repositories;
 

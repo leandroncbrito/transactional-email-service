@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Providers;
 using TransactionalEmail.Core.DTO;
 using Microsoft.Extensions.Logging;
 using TransactionalEmail.Core.Options;

@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Queue;
 
 namespace TransactionalEmail.Infra.Queue
 {

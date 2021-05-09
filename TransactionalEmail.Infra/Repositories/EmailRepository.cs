@@ -1,8 +1,8 @@
 using MongoDB.Driver;
 using TransactionalEmail.Core.Models;
-using TransactionalEmail.Core.Interfaces;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using TransactionalEmail.Core.Interfaces.Repositories;
 
 namespace TransactionalEmail.Infra.Repositories
 {

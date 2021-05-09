@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Concurrent;
-using System.IO;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using DnsClient.Internal;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using TransactionalEmail.Core.Interfaces;
+using TransactionalEmail.Core.Interfaces.Queue;
 
 namespace TransactionalEmail.Infra.Queue
 {

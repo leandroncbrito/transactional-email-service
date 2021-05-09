@@ -1,4 +1,4 @@
-namespace TransactionalEmail.Core.Interfaces
+namespace TransactionalEmail.Core.Interfaces.Providers
 {
     public interface ISendGridProvider : IMailProvider
     {
