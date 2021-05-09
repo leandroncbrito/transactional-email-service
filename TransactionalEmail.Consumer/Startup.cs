@@ -33,7 +33,7 @@ namespace TransactionalEmail.Consumer
 
             var baseurl = Configuration.GetValue<string>("EmailClient:BaseUrl");
 
-            services.AddHttpClient<TransactionalEmailClient>(config =>
+            services.AddHttpClient<EmailClient>(config =>
             {
                 config.BaseAddress = new Uri(baseurl);
                 config.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

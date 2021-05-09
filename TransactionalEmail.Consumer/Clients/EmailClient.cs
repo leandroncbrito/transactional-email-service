@@ -7,13 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace TransactionalEmail.Consumer.Clients
 {
-    public class TransactionalEmailClient
+    public class EmailClient
     {
         public HttpClient client { get; }
 
-        private readonly ILogger<TransactionalEmailClient> logger;
+        private readonly ILogger<EmailClient> logger;
 
-        public TransactionalEmailClient(HttpClient client, ILogger<TransactionalEmailClient> logger)
+        public EmailClient(HttpClient client, ILogger<EmailClient> logger)
         {
             this.client = client;
             this.logger = logger;
@@ -21,13 +21,14 @@ namespace TransactionalEmail.Consumer.Clients
 
         public async Task<HttpClientResponse> SendEmailAsync(EmailClientRequest email)
         {
-            logger.LogInformation("Sending email async");
+            logger.LogInformation("Calling api to send email async");
 
             using var response = await client.PostAsJsonAsync("/email/send", email);
 
-            // response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
 
-            logger.LogInformation("Reading response json");
+            logger.LogDebug("Reading response json");
+
             return await response.Content.ReadFromJsonAsync<HttpClientResponse>();
         }
     }

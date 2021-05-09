@@ -10,13 +10,13 @@ namespace TransactionalEmail.Consumer.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly TransactionalEmailClient emailClient;
+        private readonly EmailClient emailClient;
 
         private readonly ILogger<AccountService> logger;
 
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AccountService(TransactionalEmailClient emailClient, IHttpContextAccessor httpContextAccessor, ILogger<AccountService> logger)
+        public AccountService(EmailClient emailClient, IHttpContextAccessor httpContextAccessor, ILogger<AccountService> logger)
         {
             this.emailClient = emailClient;
             this.httpContextAccessor = httpContextAccessor;
@@ -26,10 +26,10 @@ namespace TransactionalEmail.Consumer.Services
         public async Task<HttpClientResponse> RegisterAsync(RegisterRequest registerRequest)
         {
             var newUserEmail = new EmailClientRequest(
-                    registerRequest.Email,
-                    "Registration completed",
-                    "Thank you for your registration."
-                );
+                registerRequest.Email,
+                "Registration completed",
+                "Thank you for your registration."
+            );
 
             return await emailClient.SendEmailAsync(newUserEmail);
         }
