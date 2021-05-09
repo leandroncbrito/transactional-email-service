@@ -1,6 +1,7 @@
 # TRANSACTIONAL EMAIL MICROSERVICE
 
 This transactional email microservice is responsible to streamline all transactional emails with a high degree of certainty.
+The email providers choose in this project were: Sendgrid and Mailjet (fallback)
 
 ### Built With
 * [Dotnet Core 5.0](https://dotnet.microsoft.com/)
@@ -56,23 +57,37 @@ The endpoints expose by the API are:
 1. http://localhost/status (GET)
   - Returns the status if the api is up and running
 
-2. http://localhost/email/send (POST)
-  - Receives a json on the format below, enqueue the email and send it to the user
-
-  ```json
-    {
-      "to": "email@email.com", // email (required)
-      "subject": "Email subject", // string (required)
-      "message": "Email message", // string / html (required)
-      "format": "text" // text (default) / html (optional)
-    }
-  ```
-
-- The response uses the format:
+  **Response**
   ```json
     {
       "status": 200,
       "title": "API is up and running"
+    }
+  ```
+
+2. http://localhost/email/send (POST)
+  - Receives a json on the format below, enqueue the email and send it to the user
+
+  **Request**
+
+  Header: Content-Type: application/json
+  ```json
+    {
+      "to": "email@email.com",
+      "subject": "Email subject",
+      "message": "Email message",
+      "format": "text"
+    }
+  ```
+  - `To`: the destination email address
+  - `Subject`: the subject of the message
+  - `Message`: the message body of the email
+
+  **Response**
+  ```json
+    {
+      "status": 202,
+      "title": "Email added to the queue"
     }
   ```
 
@@ -83,9 +98,9 @@ To run the cli project use:
     docker-compose run --rm cli cli
   ```
 Write the data and press ENTER
-  - **To**: the destination email address
-  - **Subject**: the subject of the message
-  - **Message**: the message body of the email
+  - `To`: the destination email address
+  - `Subject`: the subject of the message
+  - `Message`: the message body of the email
 
 ### Consumer (PORT 8080)
 
@@ -94,6 +109,9 @@ The endpoints expose by the Consumer are:
   - Receives a json on the format below
   - Call Api **email/send** endpoint with **Registered User** email template
 
+  **Request**
+
+  Header: Content-Type: application/json
   ```json
     {
       "email": "email@email.com"
@@ -105,9 +123,20 @@ The endpoints expose by the Consumer are:
   - Generate a reset token
   - Call Api **email/send** endpoint with **Forgot Password** email template with the token in the link
 
+  **Request**
+
+  Header: Content-Type: application/json
   ```json
     {
       "email": "email@email.com"
+    }
+  ```
+
+  **Response**
+  ```json
+    {
+      "status": 202,
+      "title": "Email added to the queue"
     }
   ```
 
