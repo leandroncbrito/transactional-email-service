@@ -1,13 +1,13 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TransactionalEmail.Core.DTO;
 
 namespace TransactionalEmail.Api.Requests
 {
     public class EmailRequest
     {
-        // @TODO: change to List
         [Required]
-        [EmailAddress]
-        public string To { get; set; }
+        public IEnumerable<To> Recipients { get; set; }
 
         [Required]
         public string Subject { get; set; }
@@ -18,3 +18,4 @@ namespace TransactionalEmail.Api.Requests
         public string Format { get; set; }
     }
 }
+

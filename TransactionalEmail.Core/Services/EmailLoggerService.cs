@@ -4,6 +4,7 @@ using System;
 using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Repositories;
 using TransactionalEmail.Core.Interfaces.Services;
+using System.Collections.Generic;
 
 namespace TransactionalEmail.Core.Services
 {
@@ -24,11 +25,24 @@ namespace TransactionalEmail.Core.Services
             {
                 logger.LogInformation("Storing email sent");
 
-                var email = new Email(emailValueObject.To, emailValueObject.Subject, emailValueObject.Message, emailValueObject.Format);
+                var emails = new List<Email>();
+                foreach (var to in emailValueObject.Recipients)
+                {
+                    var email = new Email
+                    {
+                        Name = to.Name,
+                        Address = to.Email,
+                        Subject = emailValueObject.Subject,
+                        Message = emailValueObject.Message,
+                        Format = emailValueObject.Format
+                    };
 
-                var response = await emailRepository.CreateAsync(email);
+                    emails.Add(email);
+                }
 
-                logger.LogInformation("Email {0} successfully stored at: {1}", response.ToString(), response.CreationTime);
+                await emailRepository.CreateManyAsync(emails);
+
+                logger.LogInformation("Email {0} successfully stored");
             }
             catch (Exception ex)
             {

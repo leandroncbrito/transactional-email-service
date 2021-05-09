@@ -24,7 +24,7 @@ namespace TransactionalEmail.Api.Controllers
         {
             logger.LogInformation("Email request received", request);
 
-            var emailValueObject = new EmailValueObject(request.To, request.Subject, request.Message, request.Format);
+            var emailValueObject = new EmailValueObject(request.Recipients, request.Subject, request.Message, request.Format);
 
             await emailQueueService.Enqueue(emailValueObject);
 

@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using TransactionalEmail.Core.ValueObjects;
 using TransactionalEmail.Core.Interfaces.Services;
+using System.Collections.Generic;
+using TransactionalEmail.Core.DTO;
 
 namespace TransactionalEmail.Cli
 {
@@ -26,9 +28,11 @@ namespace TransactionalEmail.Cli
         {
             Console.WriteLine("\nTRANSACTIONAL EMAIL SERVICE");
 
-            // @TODO: add input validation
-            Console.Write("\nTo: ");
-            var to = Console.ReadLine();
+            Console.Write("\nName: ");
+            var name = Console.ReadLine();
+
+            Console.Write("Address: ");
+            var address = Console.ReadLine();
 
             Console.Write("Subject: ");
             var subject = Console.ReadLine();
@@ -36,15 +40,17 @@ namespace TransactionalEmail.Cli
             Console.Write("Message: ");
             var message = Console.ReadLine();
 
-            var emailService = serviceProvider.GetService<IEmailQueueService>();
+            var emailService = serviceProvider.GetService<IEmailService>();
 
-            var emailValueObject = new EmailValueObject(to, subject, message);
+            var recipient = new List<To>() { new To(name, address) };
+
+            var emailValueObject = new EmailValueObject(recipient, subject, message);
 
             Console.WriteLine("\nSending email...");
 
-            await emailService.Enqueue(emailValueObject);
+            await emailService.SendEmailAsync(emailValueObject);
 
-            Console.WriteLine("Email added to the queue");
+            Console.WriteLine("Email sent successfully");
         }
     }
 }
