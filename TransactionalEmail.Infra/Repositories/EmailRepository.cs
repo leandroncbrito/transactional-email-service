@@ -3,6 +3,7 @@ using TransactionalEmail.Core.Models;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using TransactionalEmail.Core.Interfaces.Repositories;
+using System.Collections.Generic;
 
 namespace TransactionalEmail.Infra.Repositories
 {
@@ -21,6 +22,11 @@ namespace TransactionalEmail.Infra.Repositories
             await collection.InsertOneAsync(email);
 
             return email.Id;
+        }
+
+        public async Task CreateManyAsync(IEnumerable<Email> emails)
+        {
+            await collection.InsertManyAsync(emails);
         }
     }
 }
