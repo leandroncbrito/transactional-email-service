@@ -21,13 +21,13 @@ namespace TransactionalEmail.Consumer.Clients
 
         public async Task<HttpClientResponse> SendEmailAsync(EmailClientRequest email)
         {
-            logger.LogInformation("Calling api to send email async");
+            logger.LogInformation("Calling api to send email async", email);
 
             using var response = await client.PostAsJsonAsync("/email/send", email);
 
             response.EnsureSuccessStatusCode();
 
-            logger.LogDebug("Reading response json");
+            logger.LogDebug("Reading json response");
 
             return await response.Content.ReadFromJsonAsync<HttpClientResponse>();
         }
