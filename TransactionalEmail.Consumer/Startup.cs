@@ -3,11 +3,17 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MySqlConnector;
 using TransactionalEmail.Consumer.Clients;
+using TransactionalEmail.Consumer.Context;
+using TransactionalEmail.Consumer.Interfaces.Repositories;
+using TransactionalEmail.Consumer.Interfaces.Services;
+using TransactionalEmail.Consumer.Repositories;
 using TransactionalEmail.Consumer.Services;
 
 namespace TransactionalEmail.Consumer
@@ -41,11 +47,17 @@ namespace TransactionalEmail.Consumer
             services.AddHttpClient<EmailClient>(config =>
             {
                 config.BaseAddress = new Uri(baseurl);
+                config.DefaultRequestHeaders.Accept.Clear();
                 config.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseMySQL(Configuration.GetConnectionString("Default"));
+            });
+
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
