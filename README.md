@@ -6,10 +6,11 @@ The email providers choosen in this project are: Sendgrid (main) and Mailjet (fa
 
 When the main provider is unavailable the fallback is called.
 
-### Built With
+## Built with
 - [Dotnet Core 5.0](https://dotnet.microsoft.com/)
 - [MongoDB](https://www.mongodb.com/)
 - [xUnit.net](https://xunit.net/)
+- [MySQL](https://www.mysql.com/)
 
 ## Choices made
 
@@ -53,6 +54,11 @@ the code call **Store** asynchronously, so it doesn't wait the process finish.
 
 Is one of the most popular test frameworks for the .NET ecosystem.
 It's easy to implement, only some attributes in the methods turns it in a test.
+
+### MySQL
+
+MySQL was choosen to be used on "consumer self-service" since it stores user data. It's easy to connect to .net core through the MySQL Connector/NET.
+MySQL Connector/NET is a fully managed ADO.NET driver written in 100% pure C#.
 
 ## How to add new providers
 
@@ -177,15 +183,21 @@ The endpoints expose by the API are:
   Header: Content-Type: application/json
   ```json
     {
-      "to": "email@email.com",
+      "recipients": [
+        {
+          "name": "Name",
+          "email": "email@email.com",
+        }
+      ],
       "subject": "Email subject",
       "message": "Email message",
       "format": "text"
     }
   ```
-  - `To`: the destination email address
+  - `Recipients`: the destination name/email
   - `Subject`: the subject of the message
   - `Message`: the message body of the email
+  - `Format`: the format of the message: text (default), html and markdown
 
   **Response**
   ```json
@@ -202,7 +214,8 @@ To run the cli project use:
     docker-compose run --rm cli cli
   ```
 Write the data and press ENTER
-  - `To`: the destination email address
+  - `Name`: the destination name
+  - `Email`: the destination email
   - `Subject`: the subject of the message
   - `Message`: the message body of the email
 
