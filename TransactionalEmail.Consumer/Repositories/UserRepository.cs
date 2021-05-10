@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,12 @@ namespace TransactionalEmail.Consumer.Repositories
 
         public async Task<User> GetByEmail(string email)
         {
-            return await context.Users.Where(x => x.Email == email).FirstAsync();
+            return await context.Users.SingleOrDefaultAsync(x => x.Email == email);
+        }
+
+        public async Task<User> GetByToken(string resetToken)
+        {
+            return await context.Users.SingleOrDefaultAsync(x => x.ResetToken == resetToken);
         }
 
         public async Task<User> Update(User user)

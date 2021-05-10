@@ -7,6 +7,7 @@ namespace TransactionalEmail.Consumer.Interfaces.Repositories
     {
         Task<User> Add(User user);
         Task<User> GetByEmail(string email);
+        Task<User> GetByToken(string resetToken);
         Task<User> Update(User user);
     }
 }
