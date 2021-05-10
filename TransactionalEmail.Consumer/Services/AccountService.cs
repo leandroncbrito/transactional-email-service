@@ -11,12 +11,14 @@ using TransactionalEmail.Consumer.Responses;
 using TransactionalEmail.Consumer.ValueObjects;
 using System.Net;
 using System;
+using BC = BCrypt.Net.BCrypt;
 
 namespace TransactionalEmail.Consumer.Services
 {
     public class AccountService : IAccountService
     {
         private readonly EmailClient emailClient;
+
         private readonly IUserRepository userRepository;
 
         private readonly ILogger<AccountService> logger;
@@ -30,7 +32,16 @@ namespace TransactionalEmail.Consumer.Services
 
         public async Task<HttpClientResponse> RegisterAsync(RegisterDTO register)
         {
-            var user = new User(register.Name, register.Email, register.Password);
+            var userDB = await userRepository.GetByEmail(register.Email);
+
+            if (userDB != null)
+            {
+                logger.LogInformation("User already exists", register.Email);
+                return new HttpClientResponse(HttpStatusCode.Conflict, "User alread exists");
+            }
+
+            var hash = BC.HashPassword(register.Password);
+            var user = new User(register.Name, register.Email, hash);
 
             var userCreated = await userRepository.Add(user);
 
@@ -41,7 +52,9 @@ namespace TransactionalEmail.Consumer.Services
                 new RegisterTemplate()
             );
 
-            return await emailClient.SendEmailAsync(newUserEmail);
+            await emailClient.SendEmailAsync(newUserEmail);
+
+            return new HttpClientResponse(HttpStatusCode.OK, "User registered successfully");
         }
 
         public async Task<HttpClientResponse> ForgotPasswordAsync(ForgotPasswordDTO forgotPassword)
@@ -68,14 +81,35 @@ namespace TransactionalEmail.Consumer.Services
                 new ForgotPasswordTemplate(forgotPassword.ValidateUrl)
             );
 
-            return await emailClient.SendEmailAsync(forgotPasswordEmail);
+            await emailClient.SendEmailAsync(forgotPasswordEmail);
+
+            return new HttpClientResponse(HttpStatusCode.OK, "Reset token generated successfully");
+
         }
 
-        public Task<HttpClientResponse> ResetPasswordAsync(ResetPasswordRequest request)
+        public async Task<HttpClientResponse> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
         {
-            return null;
-            //return new HttpClientResponse(System.Net.HttpStatusCode.OK, "reset", true);
-        }
+            var user = await userRepository.GetByToken(resetPasswordDTO.Token);
 
+            if (user == null)
+            {
+                logger.LogInformation("User not found", resetPasswordDTO.Token);
+                return new HttpClientResponse(HttpStatusCode.NotFound, "User not found");
+            }
+
+            if (user.ResetTokenExpireDate < DateTime.UtcNow)
+            {
+                logger.LogInformation("Token expired", resetPasswordDTO.Token);
+                return new HttpClientResponse(HttpStatusCode.Unauthorized, "Token expired");
+            }
+
+            user.Password = BC.HashPassword(resetPasswordDTO.Password);
+            user.ResetToken = null;
+            user.ResetTokenExpireDate = null;
+
+            await userRepository.Update(user);
+
+            return new HttpClientResponse(HttpStatusCode.OK, "Password reseted successfully");
+        }
     }
 }

@@ -11,6 +11,6 @@ namespace TransactionalEmail.Consumer.Interfaces.Services
 
         Task<HttpClientResponse> ForgotPasswordAsync(ForgotPasswordDTO forgotPassword);
 
-        Task<HttpClientResponse> ResetPasswordAsync(ResetPasswordRequest request);
+        Task<HttpClientResponse> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO);
     }
 }
