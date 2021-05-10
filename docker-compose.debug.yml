@@ -26,3 +26,15 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+
+  consumer:
+    image: consumer
+    build:
+      context: .
+      dockerfile: TransactionalEmail.Consumer/Dockerfile
+    ports:
+      - 6000:6000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
