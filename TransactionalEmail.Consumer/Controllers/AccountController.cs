@@ -4,7 +4,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TransactionalEmail.Consumer.DTO;
 using TransactionalEmail.Consumer.Helpers;
+using TransactionalEmail.Consumer.Interfaces.Services;
 using TransactionalEmail.Consumer.Requests;
 using TransactionalEmail.Consumer.Responses;
 using TransactionalEmail.Consumer.Services;
@@ -17,6 +19,7 @@ namespace TransactionalEmail.Consumer.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService accountService;
+
         private readonly ILogger<AccountController> logger;
 
         public AccountController(IAccountService accountService, ILogger<AccountController> logger)
@@ -32,7 +35,7 @@ namespace TransactionalEmail.Consumer.Controllers
             {
                 logger.LogInformation("Registering new user endpoint");
 
-                var register = new Register(request.Email);
+                var register = new RegisterDTO(request.Name, request.Email, request.Password);
 
                 var response = await accountService.RegisterAsync(register);
 
@@ -43,10 +46,10 @@ namespace TransactionalEmail.Consumer.Controllers
             catch (HttpRequestException ex)
             {
                 logger.LogError($"It was not possible to send the register email to {request.Email}");
-                logger.LogCritical(ex.Message, ex);
+                logger.LogCritical(ex.Message, ex.InnerException);
 
                 var error = new HttpClientResponse(ex.StatusCode, ex.Message);
-                return BadRequest(error);
+                return StatusCode(500, ex);
             }
         }
 
@@ -55,17 +58,17 @@ namespace TransactionalEmail.Consumer.Controllers
         {
             try
             {
+                logger.LogInformation("Forgot password endpoint");
+
                 var token = TokenHelper.Generate();
 
                 var validateUrl = UrlHelper.Generate(HttpContext.Request, Url.RouteUrl("validate-reset-token"), $"token={token}");
 
-                logger.LogInformation("Forgot password endpoint");
-
-                var forgotPasswordDTO = new ForgotPassword(request.Email, validateUrl);
+                var forgotPasswordDTO = new ForgotPasswordDTO(request.Email, token, validateUrl);
 
                 var response = await accountService.ForgotPasswordAsync(forgotPasswordDTO);
 
-                logger.LogInformation("Forgot password email sent successfully");
+                logger.LogInformation("Reset password token created successfully");
 
                 return Ok(response);
             }
@@ -75,12 +78,12 @@ namespace TransactionalEmail.Consumer.Controllers
                 logger.LogCritical(ex.Message, ex);
 
                 var error = new HttpClientResponse(ex.StatusCode, ex.Message);
-                return BadRequest(error);
+                return StatusCode(500, ex.InnerException);
             }
         }
 
         [HttpGet("validate-reset-token", Name = "validate-reset-token")]
-        public IActionResult ValidateResetToken([FromQuery] string token)
+        public async Task<IActionResult> ValidateResetToken([FromQuery] string token)
         {
             var response = new HttpClientResponse(HttpStatusCode.OK, "Token is valid");
 
@@ -108,7 +111,7 @@ namespace TransactionalEmail.Consumer.Controllers
                 logger.LogCritical(ex.Message, ex);
 
                 var error = new HttpClientResponse(HttpStatusCode.InternalServerError, ex.Message);
-                return BadRequest(error);
+                return StatusCode(500, ex.InnerException);
             }
         }
     }
