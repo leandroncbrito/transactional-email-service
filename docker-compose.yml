@@ -84,7 +84,25 @@ services:
     networks:
       - te_local
 
+  mysql:
+    image: mysql
+    container_name: mysqldb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: TransactionalEmail
+    ports:
+      - "3306:3306"
+    networks:
+      - te_local
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-initdb:/docker-entrypoint-initdb.d
+
 networks:
   te_local:
 volumes:
   mongo_data:
+  mysql_data:
+  mysql-initdb:
+
