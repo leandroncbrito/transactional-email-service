@@ -1,19 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using TransactionalEmail.Consumer.EmailTemplates;
 
 namespace TransactionalEmail.Consumer.Requests
 {
     public class EmailClientRequest
     {
-        public EmailClientRequest(string to, string subject, string message, string format = "html")
+        public EmailClientRequest(To recipient, BaseEmailTemplate emailTemplate, string format = "html")
         {
-            To = to;
-            Subject = subject;
-            Message = message;
+            Recipients = new List<To>()
+            {
+                new To(recipient.Name, recipient.Email)
+            };
+
+            Subject = emailTemplate.Subject;
+            Message = emailTemplate.GetMessage();
             Format = format;
         }
 
-        [JsonPropertyNameAttribute("to")]
-        public string To { get; set; }
+        [JsonPropertyNameAttribute("recipients")]
+        public List<To> Recipients { get; set; }
 
         [JsonPropertyNameAttribute("subject")]
         public string Subject { get; set; }
@@ -23,5 +30,20 @@ namespace TransactionalEmail.Consumer.Requests
 
         [JsonPropertyNameAttribute("format")]
         public string Format { get; set; }
+    }
+
+    public class To
+    {
+        public To(string name, string email)
+        {
+            Name = name;
+            Email = email;
+        }
+
+        [JsonPropertyNameAttribute("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyNameAttribute("email")]
+        public string Email { get; set; }
     }
 }
