@@ -35,11 +35,9 @@ namespace TransactionalEmail.Consumer.Controllers
             {
                 logger.LogInformation("Registering new user endpoint");
 
-                var register = new RegisterDTO(request.Name, request.Email, request.Password);
+                var registerDTO = new RegisterDTO(request.Name, request.Email, request.Password);
 
-                var response = await accountService.RegisterAsync(register);
-
-                logger.LogInformation("Register email sent successfully");
+                var response = await accountService.RegisterAsync(registerDTO);
 
                 return Accepted(response);
             }
@@ -87,22 +85,22 @@ namespace TransactionalEmail.Consumer.Controllers
         {
             try
             {
-                //Test if User.ResetToken === request.Token
-                var response = accountService.ResetPasswordAsync(request);
+                logger.LogInformation("Reset password endpoint");
 
-                // if (!response.Success)
-                // {
-                //     //var errors = ModelState.Keys.SelectMany(key => ModelState[key].Errors.Select(x => x.ErrorMessage));
-                //     return BadRequest(response);
-                // }
+                var resetPasswordDTO = new ResetPasswordDTO(request.Token, request.Password);
 
-                return Ok();
+                var response = await accountService.ResetPasswordAsync(resetPasswordDTO);
+
+                logger.LogInformation("Password reseted successfully");
+
+                return Accepted(response);
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
+                logger.LogError($"It was not possible to send the reset password email to {request.Token}");
                 logger.LogCritical(ex.Message, ex);
 
-                var error = new HttpClientResponse(HttpStatusCode.InternalServerError, ex.Message);
+                var error = new HttpClientResponse(ex.StatusCode, ex.Message);
                 return StatusCode(500, ex.InnerException);
             }
         }
