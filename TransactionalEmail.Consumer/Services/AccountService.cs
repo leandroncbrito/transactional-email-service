@@ -78,7 +78,7 @@ namespace TransactionalEmail.Consumer.Services
 
             var forgotPasswordEmail = new EmailClientRequest(
                 new To(user.Name, user.Email),
-                new ForgotPasswordTemplate(forgotPassword.ValidateUrl)
+                new ForgotPasswordTemplate(forgotPassword.Token, forgotPassword.ValidateUrl)
             );
 
             await emailClient.SendEmailAsync(forgotPasswordEmail);

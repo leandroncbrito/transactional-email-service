@@ -4,10 +4,13 @@ namespace TransactionalEmail.Consumer.ValueObjects
 {
     public class ForgotPasswordTemplate : BaseEmailTemplate
     {
-        public ForgotPasswordTemplate(string validateUrl)
+        public ForgotPasswordTemplate(string token, string validateUrl)
         {
+            Token = token;
             ValidateUrl = validateUrl;
         }
+
+        public string Token { get; private set; }
 
         public string ValidateUrl { get; private set; }
 
@@ -15,7 +18,7 @@ namespace TransactionalEmail.Consumer.ValueObjects
 
         public override string GetMessage()
         {
-            return $"Click on this <a href=\"{ValidateUrl}\">link</a> to set a new password";
+            return $"Click on this <a href=\"{ValidateUrl}\">link</a> to set a new password <br> Token: {Token}";
         }
     }
 }
