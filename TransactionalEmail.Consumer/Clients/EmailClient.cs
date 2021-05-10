@@ -4,6 +4,8 @@ using System.Net.Http.Json;
 using TransactionalEmail.Consumer.Responses;
 using TransactionalEmail.Consumer.Requests;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace TransactionalEmail.Consumer.Clients
 {
@@ -21,15 +23,24 @@ namespace TransactionalEmail.Consumer.Clients
 
         public async Task<HttpClientResponse> SendEmailAsync(EmailClientRequest email)
         {
-            logger.LogInformation("Calling api to send email async", email);
+            try
+            {
+                logger.LogInformation("Calling api to send email async", email);
+                using var response = await client.PostAsJsonAsync("/email/send", email);
 
-            using var response = await client.PostAsJsonAsync("/email/send", email);
-
-            response.EnsureSuccessStatusCode();
-
-            logger.LogDebug("Reading json response");
-
-            return await response.Content.ReadFromJsonAsync<HttpClientResponse>();
+                logger.LogDebug("Reading json response");
+                return await response.Content.ReadFromJsonAsync<HttpClientResponse>();
+            }
+            catch (HttpRequestException ex)
+            {
+                logger.LogCritical(ex.Message, ex.InnerException);
+                return new HttpClientResponse(System.Net.HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (JsonException ex)
+            {
+                logger.LogCritical(ex.Message, ex.InnerException);
+                return new HttpClientResponse(System.Net.HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
