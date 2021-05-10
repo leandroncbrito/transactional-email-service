@@ -213,31 +213,42 @@ To run the cli project use:
   ```bash
     docker-compose run --rm cli cli
   ```
-Write the data and press ENTER
+
+Write the data ascked and press ENTER
   - `Name`: the destination name
   - `Email`: the destination email
   - `Subject`: the subject of the message
   - `Message`: the message body of the email
 
+The console application calls the EmailService without Queue to send the email.
+
 ### Consumer (PORT 8080)
 
 The endpoints expose by the Consumer are:
 1. http://localhost:8080/account/register (POST)
-  - Receives a json on the format below
+  - Receives a json
+  - Save the user in MySQL database, table Users
   - Call Api **email/send** endpoint with **Registered User** email template
 
   **Request**
-
   Header: Content-Type: application/json
   ```json
     {
       "email": "email@email.com"
     }
   ```
+  **Response**
+  ```json
+    {
+      "status": 200,
+      "title": "User registered successfully"
+    }
+  ```
 
 2. http://localhost:8080/account/forgot-password (POST)
-  - Receives a json on the format below
+  - Receives a json
   - Generate a reset token
+  - Save the token and expire date to 1 day in MySQL database
   - Call Api **email/send** endpoint with **Forgot Password** email template with the token in the link
 
   **Request**
@@ -252,8 +263,32 @@ The endpoints expose by the Consumer are:
   **Response**
   ```json
     {
-      "status": 202,
-      "title": "Email added to the queue"
+      "status": 200,
+      "title": "Reset token generated successfully"
+    }
+  ```
+
+3. http://localhost:8080/account/reset-password (POST)
+  - Receives a json
+  - Valids the token and expire date
+  - Save the new password, remove the token and expire date in MySQL database
+
+  **Request**
+
+  Header: Content-Type: application/json
+  ```json
+    {
+        "token": "41775195A9B142DC8910FD9ED741F7E49587E7E43E5BA9804A4648DF53DF49ADF509FAD1E5F69FB8",
+        "password": "12345678",
+        "confirm_password": "12345678"
+    }
+  ```
+
+  **Response**
+  ```json
+    {
+      "status": 200,
+      "title": "Password reseted successfully"
     }
   ```
 
