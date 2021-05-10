@@ -16,6 +16,7 @@ namespace TransactionalEmail.Consumer.Requests
 
         [Required]
         [MinLength(8)]
+        [JsonPropertyNameAttribute("password")]
         public string Password { get; set; }
     }
 }

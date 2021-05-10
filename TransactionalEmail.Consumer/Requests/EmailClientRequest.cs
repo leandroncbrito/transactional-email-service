@@ -9,11 +9,7 @@ namespace TransactionalEmail.Consumer.Requests
     {
         public EmailClientRequest(To recipient, BaseEmailTemplate emailTemplate, string format = "html")
         {
-            Recipients = new List<To>()
-            {
-                new To(recipient.Name, recipient.Email)
-            };
-
+            Recipients = new List<To>() { recipient };
             Subject = emailTemplate.Subject;
             Message = emailTemplate.GetMessage();
             Format = format;

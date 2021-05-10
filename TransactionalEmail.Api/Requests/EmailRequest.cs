@@ -9,7 +9,7 @@ namespace TransactionalEmail.Api.Requests
     {
         [Required]
         [JsonPropertyNameAttribute("recipients")]
-        public List<To> Recipients => new List<To>();
+        public IEnumerable<To> Recipients { get; set; }
 
         [Required]
         [JsonPropertyNameAttribute("subject")]
