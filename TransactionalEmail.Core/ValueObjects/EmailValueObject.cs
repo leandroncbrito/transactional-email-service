@@ -11,7 +11,6 @@ namespace TransactionalEmail.Core.ValueObjects
 {
     public class EmailValueObject
     {
-
         public EmailValueObject(IEnumerable<To> recipients, string subject, string message = "", string format = EmailFormat.TEXT)
         {
             Recipients = recipients;

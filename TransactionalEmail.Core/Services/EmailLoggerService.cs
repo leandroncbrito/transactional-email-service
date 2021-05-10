@@ -42,7 +42,7 @@ namespace TransactionalEmail.Core.Services
 
                 await emailRepository.CreateManyAsync(emails);
 
-                logger.LogInformation("Email {0} successfully stored");
+                logger.LogInformation("Email successfully stored");
             }
             catch (Exception ex)
             {
