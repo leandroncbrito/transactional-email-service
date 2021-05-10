@@ -21,10 +21,10 @@ namespace TransactionalEmail.Api.Controllers
             this.logger = logger;
         }
 
-        [HttpPost("send", Name = "send")]
-        public async Task<IActionResult> Send(EmailRequest request)
+        [HttpPost]
+        public async Task<IActionResult> Send([FromBody] EmailRequest request)
         {
-            logger.LogInformation("Email request received", request);
+            logger.LogInformation("Email request received");
 
             var emailValueObject = new EmailValueObject(request.Recipients, request.Subject, request.Message, request.Format);
 
