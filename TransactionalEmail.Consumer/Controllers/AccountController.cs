@@ -80,6 +80,12 @@ namespace TransactionalEmail.Consumer.Controllers
             }
         }
 
+        [HttpGet("validate-reset-token", Name = "validate-reset-token")]
+        public IActionResult ValidateResetToken([FromQuery] string token)
+        {
+            return Ok();
+        }
+
         [HttpPost("reset-password", Name = "reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
