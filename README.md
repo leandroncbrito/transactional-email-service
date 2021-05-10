@@ -163,6 +163,10 @@ Note: its required to fill all appsettings files because the core of the code is
 
 ### API (PORT 80)
 
+Swagger available on: http://localhost/swagger
+![image](https://user-images.githubusercontent.com/9701801/117609608-b51f2680-b136-11eb-9c85-d670d60b8185.png)
+
+
 The endpoints expose by the API are:
 1. http://localhost/status (GET)
   - Returns the status if the api is up and running
@@ -223,6 +227,9 @@ Write the data ascked and press ENTER
 The console application calls the EmailService without Queue to send the email.
 
 ### Consumer (PORT 8080)
+
+Swagger available on: http://localhost:8080/swagger
+![image](https://user-images.githubusercontent.com/9701801/117609721-dda72080-b136-11eb-8ab7-f1a122234dc2.png)
 
 The endpoints expose by the Consumer are:
 1. http://localhost:8080/account/register (POST)
