@@ -82,14 +82,6 @@ namespace TransactionalEmail.Consumer.Controllers
             }
         }
 
-        [HttpGet("validate-reset-token", Name = "validate-reset-token")]
-        public async Task<IActionResult> ValidateResetToken([FromQuery] string token)
-        {
-            var response = new HttpClientResponse(HttpStatusCode.OK, "Token is valid");
-
-            return Ok(response);
-        }
-
         [HttpPost("reset-password", Name = "reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
