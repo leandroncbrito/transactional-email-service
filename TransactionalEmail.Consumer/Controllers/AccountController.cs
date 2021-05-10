@@ -39,7 +39,7 @@ namespace TransactionalEmail.Consumer.Controllers
 
                 var response = await accountService.RegisterAsync(registerDTO);
 
-                return Accepted(response);
+                return Ok(response);
             }
             catch (HttpRequestException ex)
             {
@@ -99,7 +99,7 @@ namespace TransactionalEmail.Consumer.Controllers
 
                 logger.LogInformation("Password reseted successfully");
 
-                return Accepted(response);
+                return Ok(response);
             }
             catch (HttpRequestException ex)
             {
