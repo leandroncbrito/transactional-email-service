@@ -5,6 +5,10 @@ using TransactionalEmail.Core.Constants;
 using TransactionalEmail.Core.Interfaces.Services;
 using TransactionalEmail.Core.DTO;
 using System.Collections.Generic;
+using TransactionalEmail.Core.Interfaces.Providers;
+using Moq;
+using TransactionalEmail.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace TransactionalEmail.Tests.Unit
 {
@@ -73,6 +77,60 @@ namespace TransactionalEmail.Tests.Unit
             {
                 new EmailValueObject(Recipients, null, "Message");
             });
+        }
+
+        [Fact]
+        public async void SendEmailUsingFallbackProvider()
+        {
+            var emailValueObject = new EmailValueObject(Recipients, "Subject", "Message");
+
+            var sendGridProviderMock = new Mock<ISendGridProvider>();
+            var mailjetProviderMock = new Mock<IMailjetProvider>();
+
+            var emailLoggerServiceMock = new Mock<IEmailLoggerService>();
+            var loggerMock = new Mock<ILogger<EmailService>>();
+
+            sendGridProviderMock.Setup(x => x.SendEmailAsync(emailValueObject)).ReturnsAsync(false);
+            mailjetProviderMock.Setup(x => x.SendEmailAsync(emailValueObject)).ReturnsAsync(true);
+
+            var providers = new List<IMailProvider>();
+            providers.Add(sendGridProviderMock.Object);
+            providers.Add(mailjetProviderMock.Object);
+
+            var emailServiceMock = new EmailService(providers, emailLoggerServiceMock.Object, loggerMock.Object);
+            var success = await emailServiceMock.SendEmailAsync(emailValueObject);
+
+            Assert.True(success);
+
+            sendGridProviderMock.Verify(x => x.SendEmailAsync(emailValueObject), Times.Once);
+            mailjetProviderMock.Verify(x => x.SendEmailAsync(emailValueObject), Times.Once);
+        }
+
+        [Fact]
+        public async void SendEmailSuccessfullyFallbackShouldNotBeCalled()
+        {
+            var emailValueObject = new EmailValueObject(Recipients, "Subject", "Message");
+
+            var sendGridProviderMock = new Mock<ISendGridProvider>();
+            var mailjetProviderMock = new Mock<IMailjetProvider>();
+
+            var emailLoggerServiceMock = new Mock<IEmailLoggerService>();
+            var loggerMock = new Mock<ILogger<EmailService>>();
+
+            sendGridProviderMock.Setup(x => x.SendEmailAsync(emailValueObject)).ReturnsAsync(true);
+            mailjetProviderMock.Setup(x => x.SendEmailAsync(emailValueObject)).ReturnsAsync(true);
+
+            var providers = new List<IMailProvider>();
+            providers.Add(sendGridProviderMock.Object);
+            providers.Add(mailjetProviderMock.Object);
+
+            var emailServiceMock = new EmailService(providers, emailLoggerServiceMock.Object, loggerMock.Object);
+            var success = await emailServiceMock.SendEmailAsync(emailValueObject);
+
+            Assert.True(success);
+
+            sendGridProviderMock.Verify(x => x.SendEmailAsync(emailValueObject), Times.Once);
+            mailjetProviderMock.Verify(x => x.SendEmailAsync(emailValueObject), Times.Never);
         }
     }
 }
