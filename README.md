@@ -190,7 +190,7 @@ The endpoints expose by the API are:
       "recipients": [
         {
           "name": "Name",
-          "email": "email@email.com",
+          "email": "email@email.com"
         }
       ],
       "subject": "Email subject",
