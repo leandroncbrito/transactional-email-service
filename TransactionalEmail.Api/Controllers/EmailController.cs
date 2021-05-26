@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace TransactionalEmail.Api.Controllers
 {
+    [ApiController]
     [Route("[controller]/[action]")]
     public class EmailController : ControllerBase
     {
