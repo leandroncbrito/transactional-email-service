@@ -21,15 +21,13 @@ namespace TransactionalEmail.Core.ValueObjects
             Initialize();
         }
 
-        public IEnumerable<To> Recipients { get; set; }
+        public IEnumerable<To> Recipients { get; private set; }
 
         public string Subject { get; private set; }
 
         public string Message { get; private set; }
 
         public string Format { get; private set; }
-
-        private string HtmlContent { get; set; }
 
         public string GetHtmlContent()
         {
