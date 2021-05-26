@@ -28,11 +28,22 @@ namespace TransactionalEmail.Cli
         {
             Console.WriteLine("\nTRANSACTIONAL EMAIL SERVICE");
 
-            Console.Write("\nName: ");
-            var name = Console.ReadLine();
+            var emails = new List<To>();
 
-            Console.Write("Address: ");
-            var address = Console.ReadLine();
+            var done = "";
+            while (done != "ok")
+            {
+                Console.Write("\nName: ");
+                var name = Console.ReadLine();
+
+                Console.Write("Address: ");
+                var address = Console.ReadLine();
+
+                emails.Add(new To(name, address));
+
+                Console.Write("\n\nWrite ok to finalize the recipients: ");
+                done = Console.ReadLine();
+            }
 
             Console.Write("Subject: ");
             var subject = Console.ReadLine();
@@ -42,9 +53,7 @@ namespace TransactionalEmail.Cli
 
             var emailService = serviceProvider.GetService<IEmailService>();
 
-            var recipient = new List<To>() { new To(name, address) };
-
-            var emailValueObject = new EmailValueObject(recipient, subject, message);
+            var emailValueObject = new EmailValueObject(emails, subject, message);
 
             Console.WriteLine("\nSending email...");
 
